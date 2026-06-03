@@ -1,0 +1,96 @@
+.destinos-hero {
+    height: 60vh;
+    background: url('/desfondo.jpg') center/cover;
+    position: relative;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-box {
+    max-width: 600px;
+    margin: 25px auto;
+    display: flex;
+    gap: 10px;
+}
+
+.destination-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+    transition: .3s;
+    animation: fadeUp 0.8s ease both;
+}
+
+.destination-card:hover {
+    transform: translateY(-8px);
+}
+
+.destination-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.destination-info {
+    padding: 20px;
+}
+
+.destination-info span {
+    color: #f5a623;
+    font-weight: bold;
+}
+
+.category-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    font-size: 40px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+    transition: .3s;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+}
+
+.category-card h5 {
+    margin-top: 15px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: .3s;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.03);
+}
+
+@media(max-width:768px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    .search-box {
+        flex-direction: column;
+    }
+    .destinos-hero {
+        height: 50vh;
+    }
+}

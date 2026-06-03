@@ -1,0 +1,66 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+main {
+    width: 100%;
+}
+
+.navbar {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.85) !important;
+    transition: 0.3s ease;
+    animation: fadeDown 0.45s ease both;
+    z-index: 1000;
+}
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-content {
+    flex: 1;
+    min-height: 100vh;
+    background: transparent;
+    padding: 0;
+}
+
+.app-container.sidebar-open .main-content {
+    margin-left: 300px;
+    transition: margin-left .25s ease;
+}
+
+.app-container.navbar-visible .main-content {
+    padding-top: 84px;
+}
+
+@media (max-width: 940px) {
+    .app-container.sidebar-open .main-content {
+        margin-left: 0;
+    }
+}

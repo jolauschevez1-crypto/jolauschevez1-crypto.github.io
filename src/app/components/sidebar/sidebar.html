@@ -1,0 +1,50 @@
+<div class="sidebar">
+    <div class="sidebar-brand text-center">
+        <img src="/logo.jpg" alt="JMJ Tour" class="logo">
+        <h3>JMJ Tour</h3>
+        <p>Explora Guayaquil</p>
+    </div>
+
+    <div class="sidebar-menu">
+        <a class="menu-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" [routerLink]="['/inicio']">
+            <img src="/inicio.png" class="menu-icon" alt="Inicio">
+            <span>Inicio</span>
+        </a>
+
+        <a class="menu-item" *ngIf="auth.isLoggedIn()" routerLinkActive="active" [routerLink]="['/tours']">
+            <img src="/guia.png" class="menu-icon" alt="Tours">
+            <span>Tours</span>
+        </a>
+
+        <a class="menu-item" *ngIf="auth.isLoggedIn()" routerLinkActive="active" [routerLink]="['/appmovil']">
+            <img src="/appm.png" class="menu-icon" alt="App Movil">
+            <span>App Movil</span>
+        </a>
+
+        <a class="menu-item" routerLinkActive="active" [routerLink]="['/destinos']">
+            <img src="/destino.png" class="menu-icon" alt="Destinos">
+            <span>Destinos</span>
+        </a>
+
+        <a class="menu-item" routerLinkActive="active" [routerLink]="['/favoritos']">
+            <img src="/favorito.png" class="menu-icon" alt="Favoritos">
+            <span>Favoritos</span>
+        </a>
+
+        <a class="menu-item" *ngIf="!auth.isLoggedIn()" routerLinkActive="active" [routerLink]="['/login']">
+            <img src="/login.png" class="menu-icon" alt="Iniciar Sesión">
+            <span>Iniciar Sesión</span>
+        </a>
+    </div>
+
+    <div class="sidebar-footer" *ngIf="auth.isLoggedIn()">
+        <a class="menu-item" routerLinkActive="active" [routerLink]="['/perfil']">
+            <img src="/gente.png" class="menu-icon" alt="Perfil">
+            <span>Perfil</span>
+        </a>
+        <button type="button" class="menu-item menu-item--danger" (click)="logout()">
+            <img src="/cerrar.png" class="menu-icon" alt="Cerrar Sesión">
+            <span>Cerrar Sesión</span>
+        </button>
+    </div>
+</div>

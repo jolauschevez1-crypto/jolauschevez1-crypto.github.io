@@ -1,0 +1,11 @@
+.card {
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+h1 {
+    color: #0d6efd;
+}

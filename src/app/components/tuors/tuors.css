@@ -1,0 +1,34 @@
+.tour-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+    transition: .3s;
+    height: 100%;
+    animation: fadeUp 0.8s ease both;
+}
+
+.tour-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+}
+
+.tour-card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.tour-body {
+    padding: 20px;
+}
+
+.tour-body h4 {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.tour-body p {
+    color: #6c757d;
+    min-height: 80px;
+}

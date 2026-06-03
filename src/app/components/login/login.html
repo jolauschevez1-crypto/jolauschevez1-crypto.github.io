@@ -1,0 +1,43 @@
+<div class="auth-page">
+    <div class="auth-layout">
+        <div class="auth-card">
+            <a class="back-link" routerLink="/home">← Volver al inicio</a>
+            <div class="auth-card-content">
+                <div class="auth-head">
+                    <img src="/logo.jpg" alt="JMJ Tours" class="auth-logo">
+                    <div>
+                        <h1>Bienvenido</h1>
+                        <p>Inicia sesión para explorar los mejores tours de Guayaquil.</p>
+                    </div>
+                </div>
+
+                <div class="auth-form">
+                    <div class="input-group">
+                        <label for="login-email">E-mail</label>
+                        <input id="login-email" #email type="email" placeholder="ejemplo@correo.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Contraseña</label>
+                        <input id="login-password" #password type="password" placeholder="********" required>
+                    </div>
+                    <button type="button" class="btn-submit" (click)="submit(email, password)">Iniciar sesión</button>
+                </div>
+
+                <div class="divider"><span>o inicia sesión con</span></div>
+
+                <div class="social-row">
+                    <button type="button" class="social-btn social-facebook">Facebook</button>
+                    <button type="button" class="social-btn social-google">Google</button>
+                    <button type="button" class="social-btn social-apple">Apple</button>
+                </div>
+
+                <div class="auth-footer">
+                    <span>¿No tienes una cuenta?</span>
+                    <a routerLink="/registro">Regístrate</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-image" role="img" aria-label="Tour scenic image"></div>
+    </div>
+</div>
