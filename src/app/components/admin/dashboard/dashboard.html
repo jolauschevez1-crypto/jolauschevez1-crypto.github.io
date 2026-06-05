@@ -1,0 +1,132 @@
+<section class="container py-5">
+
+    <div class="mb-5">
+        <h2 class="fw-bold"> Dashboard</h2>
+        <p class="text-muted">
+            Resumen general del sistema.
+        </p>
+    </div>
+
+    <!-- Estadísticas -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center py-4">
+                <h3 class="fw-bold text-primary">
+                    {{ totalesReservas().realizadas }}
+                </h3>
+                <p class="text-muted mb-0">
+                    Total Reservas
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center py-4">
+                <h3 class="fw-bold text-success">
+                    {{ totalesReservas().completadas }}
+                </h3>
+                <p class="text-muted mb-0">
+                    Confirmadas
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center py-4">
+                <h3 class="fw-bold text-warning">
+                    {{ totalesUsuarios().users }}
+                </h3>
+                <p class="text-muted mb-0">
+                    Usuarios
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center py-4">
+                <h3 class="fw-bold text-info">
+                    {{ totalTours() }}
+                </h3>
+                <p class="text-muted mb-0">
+                    Tours Activos
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Ingresos -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm text-center py-4">
+
+                <h3 class="fw-bold text-success">
+                    ${{ ingresosTotales() }}
+                </h3>
+
+                <p class="text-muted mb-0">
+                    Ingresos Confirmados
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Últimas Reservas -->
+
+    <h4 class="fw-bold mb-3">
+        Últimas Reservas
+    </h4>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle">
+
+            <thead class="table-light">
+
+                <tr>
+                    <th>Tour</th>
+                    <th>Fecha</th>
+                    <th>Personas</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr *ngFor="let r of ultimasReservas()">
+
+                    <td>{{ r.tour }}</td>
+
+                    <td>{{ r.fecha }}</td>
+
+                    <td>{{ r.personas }}</td>
+
+                    <td>${{ r.precioTotal }}</td>
+
+                    <td>
+                        <span class="badge" [ngClass]="r.badgeClass">
+
+                            {{ r.estado }}
+
+                        </span>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>

@@ -1,0 +1,76 @@
+<div class="container py-5" *ngIf="tour; else noTour">
+
+    <div class="row g-5 align-items-start">
+
+        <div class="col-lg-6">
+
+            <img [src]="tour.image" [alt]="tour.title" class="tour-image">
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <span class="badge bg-primary mb-3">
+                {{ tour.duration }}
+            </span>
+
+            <h1 class="fw-bold mb-3">
+                {{ tour.title }}
+            </h1>
+
+            <p class="tour-description">
+                {{ tour.description }}
+            </p>
+
+            <div class="price-box mb-4">
+                <h2>{{ tour.price }}</h2>
+                <span>Precio por persona</span>
+            </div>
+
+            <div class="mt-4">
+                <a class="btn btn-outline-secondary btn-lg" routerLink="/tour/{{ tour.id }}">
+                    Volver al tour
+                </a>
+            </div>
+
+        </div>
+
+        <div class="col-lg-6">
+            <div class="reservation-card">
+                <h4 class="fw-bold mb-3">Formulario de reserva</h4>
+
+                <form (submit)="reservar(); $event.preventDefault()">
+
+                    <div class="mb-3">
+                        <label class="form-label">Selecciona fecha</label>
+                        <input type="date" class="form-control" [min]="minDate" [value]="fecha()" (input)="actualizarFecha($event)">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Cantidad personas</label>
+                        <input type="number" class="form-control" min="1" [value]="personas()" (input)="actualizarPersonas($event)">
+                    </div>
+
+                    <div class="reservation-summary mb-4">
+                        <p class="mb-0">Total a pagar: ${{ total() }}</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="!puedeReservar()">
+                        Confirmar reserva
+                    </button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<ng-template #noTour>
+    <div class="container py-5 text-center">
+        <h2 class="fw-bold mb-3">Tour no encontrado</h2>
+        <p class="text-muted mb-4">No se pudo cargar el tour para reservar.</p>
+        <a class="btn btn-primary" routerLink="/tours">Volver a Tours</a>
+    </div>
+</ng-template>

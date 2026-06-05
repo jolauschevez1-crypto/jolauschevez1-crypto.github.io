@@ -1,0 +1,64 @@
+<section class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0"> Gestionar Tours</h2>
+        <button class="btn btn-primary" (click)="mostrarFormulario = !mostrarFormulario">
+      + Nuevo Tour
+    </button>
+    </div>
+
+    <!-- Formulario nuevo tour -->
+    <div *ngIf="mostrarFormulario" class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3">Nuevo Tour</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Título" [(ngModel)]="nuevoTour.title">
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Precio (ej: $45 por persona)" [(ngModel)]="nuevoTour.price">
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Duración (ej: 4 Horas)" [(ngModel)]="nuevoTour.duration">
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Rating (ej: ⭐ 4.8)" [(ngModel)]="nuevoTour.rating">
+                </div>
+                <div class="col-12">
+                    <input class="form-control" placeholder="Descripción" [(ngModel)]="nuevoTour.description">
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-success" (click)="agregar()">Guardar</button>
+                <button class="btn btn-outline-secondary" (click)="mostrarFormulario = false">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla tours -->
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Título</th>
+                    <th>Duración</th>
+                    <th>Precio</th>
+                    <th>Rating</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let t of tourService.tours()">
+                    <td>{{ t.title }}</td>
+                    <td>{{ t.duration }}</td>
+                    <td>{{ t.price }}</td>
+                    <td>{{ t.rating }}</td>
+                    <td>
+                        <button class="btn btn-outline-danger btn-sm" (click)="eliminar(t.id)">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>

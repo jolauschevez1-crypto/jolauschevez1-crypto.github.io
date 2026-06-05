@@ -1,0 +1,95 @@
+<div class="app-container" [class.sidebar-open]="auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'" [class.navbar-visible]="!auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'">
+
+    <ng-container *ngIf="!auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'">
+
+        <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+
+            <div class="container">
+
+                <a class="navbar-brand d-flex align-items-center gap-3" routerLink="/home">
+
+                    <img src="/logo.jpg" alt="JMJ Tours" class="logo">
+
+                    <div>
+                        <span class="brand-title">
+                            JMJ Tours
+                        </span>
+
+                        <small class="brand-subtitle">
+                            Descubre Guayaquil
+                        </small>
+                    </div>
+
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarMenu">
+
+                    <ul class="navbar-nav mx-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link" routerLink="/home">
+                                Inicio
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" routerLink="/tours">
+                                Tours
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" routerLink="/about">
+                                Acerca de
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" routerLink="/contactanos">
+                                Contáctanos
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="d-flex gap-2">
+
+                        <a routerLink="/login" class="btn-login">
+                            Ingresar
+                        </a>
+
+                        <a routerLink="/registro" class="btn-register">
+                            Registrarse
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </ng-container>
+
+    <ng-container *ngIf="auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'">
+
+        <app-navbar-admin *ngIf="auth.isAdmin()"></app-navbar-admin>
+
+        <app-sidebar *ngIf="!auth.isAdmin()"></app-sidebar>
+
+    </ng-container>
+
+    <main class="main-content">
+        <router-outlet></router-outlet>
+    </main>
+
+    <app-fooster *ngIf="!auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'"></app-fooster>
+
+</div>

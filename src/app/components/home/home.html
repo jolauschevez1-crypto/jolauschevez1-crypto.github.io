@@ -1,17 +1,12 @@
-<!-- HERO -->
 <div class="hero">
-
     <div class="overlay">
         <div class="content text-center text-white">
-
             <h1 class="fw-bold display-4">
                 Explora experiencias únicas con JMJ Tours
             </h1>
-
             <p class="lead mt-3">
                 Encuentra y reserva los mejores tours de forma rápida y segura.
             </p>
-
             <a routerLink="/tours" class="btn btn-light btn-lg fw-semibold mt-4">
         Ver experiencias
       </a>
@@ -20,7 +15,7 @@
     </div>
 </div>
 
-<!-- POPULAR -->
+
 <section class="popular py-5">
 
     <h2 class="text-center fw-bold mb-4">
@@ -29,22 +24,34 @@
 
     <div class="popular-grid">
 
-        <div class="place-card">
-            <img src="/cerrosantaana.jpg">
-            <h4>Cerro Santa Ana</h4>
-            <span>⭐ 4.9</span>
+        <div class="card place-card h-100" style="width: 18rem;">
+            <img src="/cerrosantaana.jpg" class="card-img-top" alt="Cerro Santa Ana">
+            <div class="card-body">
+                <h5 class="card-title">Cerro Santa Ana</h5>
+                <p class="card-text">Sube al mirador más emblemático de Guayaquil y disfruta vistas inolvidables.</p>
+                <p class="card-text text-warning">⭐ 4.9</p>
+                <a routerLink="/tours" class="btn btn-primary">Ver más</a>
+            </div>
         </div>
 
-        <div class="place-card">
-            <img src="/malecon.jpg">
-            <h4>Malecón 2000</h4>
-            <span>⭐ 4.8</span>
+        <div class="card place-card h-100" style="width: 18rem;">
+            <img src="/malecon.jpg" class="card-img-top" alt="Malecón 2000">
+            <div class="card-body">
+                <h5 class="card-title">Malecón 2000</h5>
+                <p class="card-text">Explora el corazón del río Guayas con arte, gastronomía y ocio junto al mar.</p>
+                <p class="card-text text-warning">⭐ 4.8</p>
+                <a routerLink="/tours" class="btn btn-primary">Ver más</a>
+            </div>
         </div>
 
-        <div class="place-card">
-            <img src="/parque.jpg">
-            <h4>Parque Histórico</h4>
-            <span>⭐ 4.7</span>
+        <div class="card place-card h-100" style="width: 18rem;">
+            <img src="/parque.jpg" class="card-img-top" alt="Parque Histórico">
+            <div class="card-body">
+                <h5 class="card-title">Parque Histórico</h5>
+                <p class="card-text">Conoce cultura, fauna y naturaleza en un solo recorrido familiar y educativo.</p>
+                <p class="card-text text-warning">⭐ 4.7</p>
+                <a routerLink="/tours" class="btn btn-primary">Ver más</a>
+            </div>
         </div>
 
     </div>

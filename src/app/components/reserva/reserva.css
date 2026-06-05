@@ -1,0 +1,52 @@
+.tour-image {
+    width: 100%;
+    max-height: 340px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .12);
+}
+
+.reservation-card {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .08);
+}
+
+.price-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 16px;
+}
+
+.reservation-card .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.reservation-card .form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ced4da;
+    border-radius: 12px;
+    font-size: 1rem;
+}
+
+.reservation-summary {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 14px;
+}
+
+.reservation-summary p {
+    margin: 0;
+    color: #495057;
+}
+
+@media (max-width: 768px) {
+    .tour-image {
+        height: 280px;
+    }
+}

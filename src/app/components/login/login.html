@@ -1,43 +1,147 @@
 <div class="auth-page">
+
     <div class="auth-layout">
+
+        <!-- FORMULARIO -->
+
         <div class="auth-card">
-            <a class="back-link" routerLink="/home">← Volver al inicio</a>
+
+            <a class="back-link" routerLink="/home">
+                ← Volver al inicio
+            </a>
+
             <div class="auth-card-content">
+
                 <div class="auth-head">
+
                     <img src="/logo.jpg" alt="JMJ Tours" class="auth-logo">
+
                     <div>
-                        <h1>Bienvenido</h1>
-                        <p>Inicia sesión para explorar los mejores tours de Guayaquil.</p>
+
+                        <h1>
+                            Bienvenido a JMJ Tours
+                        </h1>
+
+                        <p>
+                            Reserva experiencias únicas, descubre los mejores destinos y vive Guayaquil como nunca antes.
+                        </p>
+
                     </div>
+
+                </div>
+
+                <div class="stats-row">
+
+                    <div class="stat-box">
+                        <h4>+50</h4>
+                        <span>Tours</span>
+                    </div>
+
+                    <div class="stat-box">
+                        <h4>+500</h4>
+                        <span>Reservas</span>
+                    </div>
+
+                    <div class="stat-box">
+                        <h4>4.9★</h4>
+                        <span>Valoración</span>
+                    </div>
+
+                </div>
+
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+
+                    <strong>Atención:</strong> Verifica que tu correo y contraseña sean correctos.
+
+                    <button type="button" class="btn-close" data-bs-dismiss="alert">
+                    </button>
+
                 </div>
 
                 <div class="auth-form">
+
                     <div class="input-group">
-                        <label for="login-email">E-mail</label>
-                        <input id="login-email" #email type="email" placeholder="ejemplo@correo.com" required>
+
+                        <label>E-mail</label>
+
+                        <input #email type="email" placeholder="ejemplo@correo.com">
+
                     </div>
+
                     <div class="input-group">
-                        <label for="login-password">Contraseña</label>
-                        <input id="login-password" #password type="password" placeholder="********" required>
+
+                        <label>Contraseña</label>
+
+                        <div class="password-wrapper">
+
+                            <input #password [type]="showPassword ? 'text' : 'password'" placeholder="********">
+
+                            <button type="button" class="toggle-password" (click)="showPassword = !showPassword">
+
+                                {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+
+                            </button>
+
+                        </div>
+
                     </div>
-                    <button type="button" class="btn-submit" (click)="submit(email, password)">Iniciar sesión</button>
+
+                    <div class="forgot-password">
+
+                        <a href="#">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+
+                    </div>
+
+                    <button type="button" class="btn-submit" (click)="submit(email,password)">
+
+                        Iniciar sesión
+
+                    </button>
+
                 </div>
 
-                <div class="divider"><span>o inicia sesión con</span></div>
+                <div class="auth-note">
 
-                <div class="social-row">
-                    <button type="button" class="social-btn social-facebook">Facebook</button>
-                    <button type="button" class="social-btn social-google">Google</button>
-                    <button type="button" class="social-btn social-apple">Apple</button>
+                    Accede a tu cuenta para gestionar reservas, favoritos y experiencias turísticas.
+
                 </div>
 
                 <div class="auth-footer">
-                    <span>¿No tienes una cuenta?</span>
-                    <a routerLink="/registro">Regístrate</a>
+
+                    <span>
+                        ¿No tienes una cuenta?
+                    </span>
+
+                    <a routerLink="/registro">
+                        Regístrate
+                    </a>
+
                 </div>
+
             </div>
+
         </div>
 
-        <div class="auth-image" role="img" aria-label="Tour scenic image"></div>
+        <!-- IMAGEN -->
+
+        <div class="auth-image" role="img" aria-label="JMJ Tours">
+
+            <div class="image-content">
+
+                <h2>
+                    Explora Guayaquil
+                </h2>
+
+                <p>
+                    Vive experiencias inolvidables con nuestros tours turísticos.
+                </p>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>

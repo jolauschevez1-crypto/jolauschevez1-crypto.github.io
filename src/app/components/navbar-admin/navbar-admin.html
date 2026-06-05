@@ -1,0 +1,36 @@
+<div class="sidebar sidebar--admin">
+    <div class="sidebar-brand">
+        <img src="/logo.jpg" alt="JMJ Tour" class="logo">
+        <h3>JMJ Tour</h3>
+        <span class="admin-badge">Panel Admin</span>
+    </div>
+
+    <div class="sidebar-menu">
+        <p class="menu-section-label">General</p>
+        <a class="menu-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" [routerLink]="['/admin/dashboard']">
+            <img src="/inicio.png" class="menu-icon"> <span>Dashboard</span>
+        </a>
+
+        <p class="menu-section-label">Gestión</p>
+        <a class="menu-item" routerLinkActive="active" [routerLink]="['/admin/tours']">
+            <img src="/guia.png" class="menu-icon"> <span>Tours</span>
+        </a>
+        <a class="menu-item" routerLinkActive="active" [routerLink]="['/admin/reservas']">
+            <img src="/favorito.png" class="menu-icon"> <span>Reservas</span>
+        </a>
+
+        <p class="menu-section-label">Usuarios</p>
+        <a class="menu-item" routerLinkActive="active" [routerLink]="['/admin/usuarios']">
+            <img src="/gente.png" class="menu-icon"> <span>Usuarios</span>
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+        <a class="menu-item" routerLinkActive="active" [routerLink]="['/perfil']">
+            <img src="/gente.png" class="menu-icon"> <span>Mi Perfil</span>
+        </a>
+        <button type="button" class="menu-item menu-item--danger" (click)="logout()">
+      <img src="/cerrar.png" class="menu-icon"> <span>Cerrar Sesión</span>
+    </button>
+    </div>
+</div>

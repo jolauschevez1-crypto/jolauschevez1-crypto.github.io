@@ -1,1 +1,30 @@
-<p>favoritos works!</p>
+<section class="container py-5">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">❤️ Mis Favoritos</h2>
+        <p class="text-muted">Los tours que más te han gustado.</p>
+    </div>
+
+    <div *ngIf="favoritos().length === 0" class="text-center py-5">
+        <p class="text-muted fs-5">No tienes tours guardados aún.</p>
+        <a routerLink="/tours" class="btn btn-primary mt-3">Explorar tours</a>
+    </div>
+
+    <div class="row g-4" *ngIf="favoritos().length > 0">
+        <div *ngFor="let tour of favoritos(); let i = index" class="col-lg-4 col-md-6 d-flex justify-content-center">
+            <div class="card h-100" style="width: 18rem;">
+                <img [src]="tour.image ? tour.image : '/logo.jpg'" class="card-img-top" [alt]="tour.title">
+                <div class="card-body">
+                    <h5 class="card-title">{{ tour.title }}</h5>
+                    <p class="card-text text-muted">{{ tour.duration }}</p>
+                    <p class="card-text text-warning">{{ tour.rating }}</p>
+                    <div class="d-flex gap-2 mt-3">
+                        <a routerLink="/tours" class="btn btn-primary flex-grow-1">Reservar</a>
+                        <button type="button" class="btn btn-outline-danger" (click)="eliminar(i)">✕</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

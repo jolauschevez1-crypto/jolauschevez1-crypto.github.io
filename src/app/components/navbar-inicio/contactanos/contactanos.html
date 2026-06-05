@@ -1,0 +1,117 @@
+<section class="contact-section py-5">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h1 class="fw-bold">Contáctanos</h1>
+            <p class="text-muted">
+                ¿Tienes dudas o necesitas información sobre nuestros tours?
+            </p>
+        </div>
+
+        <div class="row g-5">
+
+            <div class="col-lg-5">
+
+                <div class="contact-info">
+
+                    <h3 class="fw-bold mb-4">
+                        Información de Contacto
+                    </h3>
+
+                    <div class="mb-4">
+                        <h5> Dirección</h5>
+                        <p>Machala, Ecuador</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5> Teléfono</h5>
+                        <p>+593 99 395 4238</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5> Correo</h5>
+                        <p>contacto@jmjtours.com</p>
+                    </div>
+
+                    <div>
+                        <h5> Horario</h5>
+                        <p>Lunes a Domingo 08:00 - 18:00</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-7">
+
+                <div class="contact-form">
+
+                    <h3 class="fw-bold mb-4">
+                        Envíanos un mensaje
+                    </h3>
+
+                    <form (ngSubmit)="enviar()">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Nombre
+                                </label>
+
+                                <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Correo
+                                </label>
+
+                                <input type="email" class="form-control" [(ngModel)]="correo" name="correo" required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Asunto
+                            </label>
+
+                            <input type="text" class="form-control" [(ngModel)]="asunto" name="asunto" required>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Mensaje
+                            </label>
+
+                            <textarea rows="6" class="form-control" [(ngModel)]="mensaje" name="mensaje" required></textarea>
+
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Enviar Mensaje
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-lg w-100 mt-2" (click)="limpiar()">
+                            Limpiar Formulario
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

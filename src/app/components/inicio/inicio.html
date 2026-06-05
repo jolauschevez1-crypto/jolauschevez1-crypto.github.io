@@ -6,15 +6,20 @@
         <div class="welcome-card">
 
             <div>
-                <h2>👋 Bienvenido, Usuario</h2>
+
+                <h2>
+                    Bienvenido, Usuario
+                </h2>
+
                 <p>
                     Descubre nuevas experiencias y administra tus reservas desde un solo lugar.
                 </p>
+
             </div>
 
             <a routerLink="/tours" class="btn btn-primary">
-        Explorar Tours
-      </a>
+                Explorar Tours
+            </a>
 
         </div>
 
@@ -28,66 +33,93 @@
     <div class="row g-4">
 
         <div class="col-md-4">
+
             <div class="stats-card">
-                <h3>5</h3>
-                <p>Reservas realizadas</p>
+
+                <h3>
+                    {{ totalReservas() }}
+                </h3>
+
+                <p>
+                    Reservas confirmadas
+                </p>
+
             </div>
+
         </div>
 
         <div class="col-md-4">
+
             <div class="stats-card">
-                <h3>8</h3>
-                <p>Tours favoritos</p>
+
+                <h3>
+                    {{ totalFavoritos() }}
+                </h3>
+
+                <p>
+                    Tours favoritos
+                </p>
+
             </div>
+
         </div>
 
         <div class="col-md-4">
+
             <div class="stats-card">
-                <h3>3</h3>
-                <p>Tours completados</p>
+
+                <h3>
+                    {{ toursCompletados() }}
+                </h3>
+
+                <p>
+                    Tours completados
+                </p>
+
             </div>
+
         </div>
 
     </div>
 
 </section>
 
-<!-- PROXIMAS RESERVAS -->
+<!-- PRÓXIMAS RESERVAS -->
 <section class="container pb-5">
 
     <h2 class="fw-bold mb-4">
-        🎟️ Próximas Reservas
+        Próximas Reservas
     </h2>
 
     <div class="row g-4">
 
-        <div class="col-md-6">
+        <div class="col-md-6" *ngFor="let reserva of proximasReservas()">
 
             <div class="reservation-card">
 
-                <h4>Cerro Santa Ana</h4>
+                <h4>
+                    {{ reserva.tour }}
+                </h4>
 
-                <p>📅 15 Junio 2026</p>
+                <p>
+                    {{ reserva.fecha }}
+                </p>
 
-                <span class="badge bg-success">
-          Confirmada
-        </span>
+                <span class="badge" [class]="reserva.badgeClass">
+
+                    {{ reserva.estado }}
+
+                </span>
 
             </div>
 
         </div>
 
-        <div class="col-md-6">
+        <div *ngIf="proximasReservas().length === 0" class="col-12">
 
-            <div class="reservation-card">
+            <div class="alert alert-info text-center">
 
-                <h4>Malecón 2000</h4>
-
-                <p>📅 22 Junio 2026</p>
-
-                <span class="badge bg-success">
-          Confirmada
-        </span>
+                No tienes reservas confirmadas.
 
             </div>
 
@@ -101,7 +133,7 @@
 <section class="container pb-5">
 
     <h2 class="fw-bold mb-4">
-        🔥 Recomendados para ti
+        Recomendados para ti
     </h2>
 
     <div class="row g-4">
@@ -109,9 +141,17 @@
         <div class="col-md-4">
 
             <div class="tour-card">
-                <img src="/cerrosantaana.jpg">
-                <h5>Cerro Santa Ana</h5>
-                <span>⭐ 4.9</span>
+
+                <img src="/cerrosantaana.jpg" alt="Cerro Santa Ana">
+
+                <h5>
+                    Cerro Santa Ana
+                </h5>
+
+                <span>
+                    ⭐ 4.9
+                </span>
+
             </div>
 
         </div>
@@ -119,9 +159,17 @@
         <div class="col-md-4">
 
             <div class="tour-card">
-                <img src="malecon.jpg">
-                <h5>Malecón 2000</h5>
-                <span>⭐ 4.8</span>
+
+                <img src="/malecon.jpg" alt="Malecón 2000">
+
+                <h5>
+                    Malecón 2000
+                </h5>
+
+                <span>
+                    ⭐ 4.8
+                </span>
+
             </div>
 
         </div>
@@ -129,9 +177,17 @@
         <div class="col-md-4">
 
             <div class="tour-card">
-                <img src="parque.jpg">
-                <h5>Parque Histórico</h5>
-                <span>⭐ 4.7</span>
+
+                <img src="/parque.jpg" alt="Parque Histórico">
+
+                <h5>
+                    Parque Histórico
+                </h5>
+
+                <span>
+                    ⭐ 4.7
+                </span>
+
             </div>
 
         </div>

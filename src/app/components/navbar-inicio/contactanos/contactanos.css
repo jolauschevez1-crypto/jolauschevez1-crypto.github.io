@@ -1,0 +1,33 @@
+.contact-section {
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.contact-info {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+    height: 100%;
+}
+
+.contact-form {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+}
+
+.form-control {
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.btn-primary {
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.contact-info h5 {
+    font-weight: 600;
+}

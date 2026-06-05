@@ -1,0 +1,42 @@
+.footer {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 60px 0 25px;
+    margin-top: 80px;
+}
+
+.footer h5 {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.footer p,
+.footer li,
+.footer small {
+    color: #cbd5e1;
+}
+
+.footer ul {
+    padding-left: 0;
+}
+
+.footer li {
+    margin-bottom: 10px;
+}
+
+.footer a {
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: .3s;
+}
+
+.footer a:hover {
+    color: white;
+    padding-left: 4px;
+}
+
+.footer hr {
+    border-color: rgba(255, 255, 255, .1);
+    margin: 25px 0;
+}

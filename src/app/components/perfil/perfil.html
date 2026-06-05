@@ -1,1 +1,67 @@
+<section class="container py-5" style="max-width: 580px;">
 
+    <!-- Avatar y nombre -->
+    <div class="text-center mb-4">
+        <div class="avatar-circle mx-auto mb-3">
+            <img src="/gente.png" alt="Avatar">
+        </div>
+        <h3 class="fw-bold mb-0">{{ nombre }}</h3>
+        <p class="text-muted">{{ email }}</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-6">
+            <div class="card border-0 shadow-sm py-3">
+                <h4 class="fw-bold text-primary mb-0">{{ reservaService.getTotales().realizadas }}</h4>
+                <small class="text-muted">Reservas</small>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card border-0 shadow-sm py-3">
+                <h4 class="fw-bold text-danger mb-0">{{ favService.total() }}</h4>
+                <small class="text-muted">Favoritos</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje éxito -->
+    <div *ngIf="successMsg" class="alert alert-success py-2 text-center">{{ successMsg }}</div>
+
+    <!-- Formulario -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+            <h5 class="fw-bold mb-4">Mis datos</h5>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Nombre</label>
+                <input type="text" class="form-control" [(ngModel)]="nombre" [disabled]="!editMode" placeholder="Tu nombre completo">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Correo electrónico</label>
+                <input type="email" class="form-control" [(ngModel)]="email" [disabled]="!editMode" placeholder="tu@correo.com">
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Teléfono</label>
+                <input type="tel" class="form-control" [(ngModel)]="telefono" [disabled]="!editMode" placeholder="Ej: +593 99 000 0000">
+            </div>
+
+            <button *ngIf="!editMode" type="button" class="btn btn-primary w-100" (click)="editar()">
+                ✏️ Editar perfil
+            </button>
+            <div *ngIf="editMode" class="d-flex gap-2">
+                <button type="button" class="btn btn-success flex-fill" (click)="guardar()">
+                    Guardar cambios
+                </button>
+                <button type="button" class="btn btn-outline-secondary" (click)="editMode = false">
+                    Cancelar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</section>

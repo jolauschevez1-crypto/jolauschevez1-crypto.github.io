@@ -1,0 +1,209 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+.app-container.sidebar-open {
+    flex-direction: row;
+}
+
+.app-container.sidebar-open .main-content {
+    margin-left: 300px;
+    transition: margin-left .3s ease;
+}
+
+.app-container.navbar-visible .main-content {
+    padding-top: 100px;
+}
+
+
+/* NAVBAR */
+
+.navbar-custom {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .08);
+    padding: 15px 0;
+    z-index: 1000;
+    animation: fadeDown .4s ease;
+}
+
+.navbar-custom .container {
+    max-width: 1400px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+
+/* LOGO */
+
+.navbar-brand {
+    margin-right: 80px !important;
+}
+
+.logo {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #e9ecef;
+}
+
+.brand-title {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0d6efd;
+    line-height: 1;
+}
+
+.brand-subtitle {
+    color: #6c757d;
+    font-size: .85rem;
+}
+
+
+/* MENU */
+
+.navbar-nav {
+    gap: 25px;
+    margin: 0 auto;
+}
+
+.nav-link {
+    color: #212529 !important;
+    font-weight: 600;
+    position: relative;
+    padding: 8px 12px !important;
+    transition: all .3s ease;
+}
+
+.nav-link:hover {
+    color: #0d6efd !important;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    bottom: 0;
+    width: 0;
+    height: 3px;
+    background: #0d6efd;
+    border-radius: 50px;
+    transition: .3s;
+}
+
+.nav-link:hover::after {
+    width: calc(100% - 24px);
+}
+
+
+/* BOTON LOGIN */
+
+.btn-login {
+    text-decoration: none;
+    border: 2px solid #0d6efd;
+    color: #0d6efd;
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.btn-login:hover {
+    background: #0d6efd;
+    color: white;
+}
+
+
+/* BOTON REGISTRO */
+
+.btn-register {
+    text-decoration: none;
+    background: #0d6efd;
+    color: white;
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.btn-register:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(13, 110, 253, .35);
+}
+
+
+/* MENU MOVIL */
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-collapse {
+    transition: .3s;
+}
+
+
+/* ANIMACION */
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 991px) {
+    .navbar-custom .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .navbar-brand {
+        margin-right: 0 !important;
+    }
+    .navbar-collapse {
+        background: white;
+        padding: 20px;
+        margin-top: 15px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+    }
+    .navbar-nav {
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    .app-container.sidebar-open .main-content {
+        margin-left: 0;
+    }
+    .logo {
+        width: 55px;
+        height: 55px;
+    }
+}

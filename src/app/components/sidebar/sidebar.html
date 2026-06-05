@@ -21,9 +21,9 @@
             <span>App Movil</span>
         </a>
 
-        <a class="menu-item" routerLinkActive="active" [routerLink]="['/destinos']">
-            <img src="/destino.png" class="menu-icon" alt="Destinos">
-            <span>Destinos</span>
+        <a class="menu-item" *ngIf="auth.isLoggedIn()" routerLinkActive="active" [routerLink]="['/reservas']">
+            <img src="/reserva.png" class="menu-icon" alt="Reservas">
+            <span>Reservas</span>
         </a>
 
         <a class="menu-item" routerLinkActive="active" [routerLink]="['/favoritos']">

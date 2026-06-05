@@ -1,97 +1,179 @@
+<!-- HERO -->
+
+<section class="tours-hero">
+
+    <div class="hero-overlay">
+
+        <div class="container text-center text-white">
+
+            <h1 class="display-4 fw-bold">
+                Descubre experiencias únicas en Guayaquil
+            </h1>
+
+            <p class="lead">
+                Explora recorridos históricos, gastronómicos, naturales y culturales.
+            </p>
+
+            <div class="search-box">
+
+                <input type="text" class="form-control" placeholder="Buscar tour..." (input)="actualizarBusqueda($event)">
+
+                <button class="btn btn-primary">
+                    Buscar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CATEGORIAS -->
+
+<section class="bg-light py-5">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">
+                Explora por categoría
+            </h2>
+        </div>
+
+        <div class="row g-4 text-center">
+
+            <div class="col-md-3">
+                <div class="category-card">
+                    <h5>🏛️ Históricos</h5>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card">
+                    <h5>🌿 Naturaleza</h5>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card">
+                    <h5>🍽️ Gastronomía</h5>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card">
+                    <h5>📸 Fotografía</h5>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- TOURS -->
+
 <section class="container py-5">
 
     <div class="text-center mb-5">
-        <h2 class="fw-bold">🌟 Experiencias y Recorridos</h2>
+        <h2 class="fw-bold">
+            Tours Disponibles
+        </h2>
+
         <p class="text-muted">
-            Descubre Guayaquil a través de nuestros tours más populares.
+            Elige la experiencia perfecta para tu próxima aventura.
         </p>
     </div>
 
     <div class="row g-4">
 
-        <!-- Tour 1 -->
-        <div class="col-lg-4 col-md-6">
+        <div *ngFor="let tour of toursFiltrados()" class="col-lg-4 col-md-6">
+
             <div class="tour-card">
-                <img src="/guayaquilcompleto.jpg" alt="Guayaquil Completo">
-                <div class="tour-body">
-                    <h4>🏙️ Guayaquil Completo</h4>
-                    <p>
-                        Malecón 2000 → Parque Seminario → Catedral → Las Peñas → Cerro Santa Ana → Puerto Santa Ana
-                    </p>
-                    <span class="badge bg-primary">8 Horas</span>
+
+                <div class="position-relative">
+
+                    <img [src]="tour.image" [alt]="tour.alt">
+
+                    <button class="favorite-btn" (click)="toggleFavorito(tour)">
+                        {{ esFavorito(tour.id) ? '❤️' : '🤍' }}
+                    </button>
+
                 </div>
+
+                <div class="tour-body">
+
+                    <span [class]="'badge mb-2 ' + tour.badgeClass">
+                        {{ tour.badgeText }}
+                    </span>
+
+                    <h4>
+                        {{ tour.title }}
+                    </h4>
+
+                    <p>
+                        {{ tour.description }}
+                    </p>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <div>
+
+                            <p class="mb-0 fw-bold text-primary">
+                                {{ tour.price }}
+                            </p>
+
+                            <small class="text-muted">
+                                {{ tour.rating }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="d-grid gap-2">
+
+                        <a class="btn btn-outline-primary" [routerLink]="['/tour', tour.id]">
+                            Ver detalles
+                        </a>
+
+                        <button class="btn btn-primary" (click)="reservar(tour.title)">
+                            Reservar ahora
+                        </button>
+
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- Tour 2 -->
-        <div class="col-lg-4 col-md-6">
-            <div class="tour-card">
-                <img src="/tuorhistorico.jpg" alt="Tour Histórico">
-                <div class="tour-body">
-                    <h4>🏛️ Tour Histórico</h4>
-                    <p>
-                        Catedral Metropolitana → Parque Seminario → Palacio Municipal → Barrio Las Peñas
-                    </p>
-                    <span class="badge bg-success">4 Horas</span>
-                </div>
-            </div>
-        </div>
+    </div>
 
-        <!-- Tour 3 -->
-        <div class="col-lg-4 col-md-6">
-            <div class="tour-card">
-                <img src="/tuornaturaleza.jpg" alt="Naturaleza">
-                <div class="tour-body">
-                    <h4>🌿 Naturaleza y Fauna</h4>
-                    <p>
-                        Isla Santay → Parque Histórico → Manglares Churute
-                    </p>
-                    <span class="badge bg-info">6 Horas</span>
-                </div>
-            </div>
-        </div>
+</section>
 
-        <!-- Tour 4 -->
-        <div class="col-lg-4 col-md-6">
-            <div class="tour-card">
-                <img src="/tuorfoto.jpg" alt="Miradores">
-                <div class="tour-body">
-                    <h4>📸 Tour Fotográfico</h4>
-                    <p>
-                        Cerro Santa Ana → Faro → Puerto Santa Ana
-                    </p>
-                    <span class="badge bg-warning text-dark">3 Horas</span>
-                </div>
-            </div>
-        </div>
+<!-- GALERIA -->
 
-        <!-- Tour 5 -->
-        <div class="col-lg-4 col-md-6">
-            <div class="tour-card">
-                <img src="/mercado.jpg" alt="Gastronomía">
-                <div class="tour-body">
-                    <h4>🍴 Tour Gastronómico</h4>
-                    <p>
-                        Mercado del Río → Puerto Santa Ana → Comida típica guayaquileña
-                    </p>
-                    <span class="badge bg-danger">5 Horas</span>
-                </div>
-            </div>
-        </div>
+<section class="container py-5">
 
-        <!-- Tour 6 -->
-        <div class="col-lg-4 col-md-6">
-            <div class="tour-card">
-                <img src="/tuornoche.jpg" alt="Tour Nocturno">
-                <div class="tour-body">
-                    <h4>🌙 Guayaquil Nocturno</h4>
-                    <p>
-                        Malecón 2000 → Puerto Santa Ana → Cerro Santa Ana iluminado
-                    </p>
-                    <span class="badge bg-dark">4 Horas</span>
-                </div>
-            </div>
-        </div>
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">
+            📸 Galería
+        </h2>
+    </div>
+
+    <div class="gallery-grid">
+
+        <img src="/cerrosantaana.jpg">
+        <img src="/malecon.jpg">
+        <img src="/parque.jpg">
+        <img src="/tuornaturaleza.jpg">
+        <img src="/mercado.jpg">
+        <img src="/guayaquilcompleto.jpg">
 
     </div>
 

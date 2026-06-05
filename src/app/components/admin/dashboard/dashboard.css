@@ -1,0 +1,22 @@
+.card {
+    transition: all .3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+h1 {
+    margin-bottom: .25rem;
+}
+
+.list-group-item {
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
+}

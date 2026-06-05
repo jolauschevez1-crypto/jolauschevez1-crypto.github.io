@@ -1,0 +1,37 @@
+<section class="container py-5">
+    <div class="mb-4">
+        <h2 class="fw-bold"> Todas las Reservas</h2>
+        <p class="text-muted">Administra el estado de cada reserva.</p>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Tour</th>
+                    <th>Fecha</th>
+                    <th>Personas</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Cambiar estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let r of reservaService.reservas()">
+                    <td>{{ r.tour }}</td>
+                    <td>{{ r.fecha }}</td>
+                    <td>{{ r.personas }}</td>
+                    <td>${{ r.precioTotal }}</td>
+                    <td><span [class]="'badge ' + r.badgeClass">{{ r.estado }}</span></td>
+                    <td>
+                        <select class="form-select form-select-sm" style="width: auto;" [value]="r.estado" (change)="cambiarEstado(r.id, $event)">
+              <option>Confirmada</option>
+              <option>Pendiente</option>
+              <option>Cancelada</option>
+            </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>

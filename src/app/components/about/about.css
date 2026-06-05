@@ -1,11 +1,83 @@
-.card {
-    transition: 0.3s;
+.about-hero {
+    height: 55vh;
+    background: url('/about.png') center/cover;
+    position: relative;
 }
 
-.card:hover {
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .60);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+    height: 100%;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #0d6efd;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.team-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+    text-align: center;
+    height: 100%;
+    transition: .3s;
+}
+
+.team-card:hover {
     transform: translateY(-5px);
 }
 
-h1 {
-    color: #0d6efd;
+.card {
+    border-radius: 20px;
+}
+
+@media(max-width:768px) {
+    .about-hero {
+        height: 45vh;
+    }
+}
+
+.team-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    border: 4px solid #0d6efd;
+}
+
+.team-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+    text-align: center;
+    height: 100%;
+    transition: .3s;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
 }

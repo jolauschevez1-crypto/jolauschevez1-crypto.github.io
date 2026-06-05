@@ -1,0 +1,44 @@
+<section class="container py-5">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">👥 Usuarios</h2>
+        <p class="text-muted">Total: {{ usuarioService.getTotales().total }} usuarios registrados.</p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Registro</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let u of usuarioService.usuarios()">
+                    <td>{{ u.nombre }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.telefono }}</td>
+                    <td>{{ u.fechaRegistro }}</td>
+                    <td>
+                        <span [class]="u.rol === 'admin' ? 'badge bg-danger' : 'badge bg-primary'">
+              {{ u.rol }}
+            </span>
+                    </td>
+                    <td class="d-flex gap-2">
+                        <button class="btn btn-outline-warning btn-sm" (click)="usuarioService.cambiarRol(u.id, u.rol === 'admin' ? 'user' : 'admin')">
+              {{ u.rol === 'admin' ? 'Quitar admin' : 'Hacer admin' }}
+            </button>
+                        <button class="btn btn-outline-danger btn-sm" (click)="usuarioService.eliminar(u.id)">
+              Eliminar
+            </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>

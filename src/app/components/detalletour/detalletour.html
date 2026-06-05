@@ -1,1 +1,101 @@
-<p>detalletour works!</p>
+<div class="container py-5" *ngIf="tour; else noTour">
+
+    <div class="row g-5">
+
+        <div class="col-lg-6">
+
+            <img [src]="tour.image" [alt]="tour.title" class="tour-image">
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <span class="badge bg-primary mb-3">
+                {{ tour.duration }}
+            </span>
+
+            <h1 class="fw-bold mb-3">
+                {{ tour.title }}
+            </h1>
+
+            <p class="tour-description">
+                {{ tour.description }}
+            </p>
+
+            <div class="info-box">
+
+                <div>
+                    <strong>Calificación</strong>
+                    <p>{{ tour.rating }}</p>
+                </div>
+
+                <div>
+                    <strong>Duración</strong>
+                    <p>{{ tour.duration }}</p>
+                </div>
+
+            </div>
+
+            <div class="price-box">
+
+                <h2>
+                    {{ tour.price }}
+                </h2>
+
+                <span>
+                    Precio por persona
+                </span>
+
+            </div>
+
+            <h4 class="fw-bold mt-4">
+                Incluye
+            </h4>
+
+            <ul class="list-group mb-4">
+
+                <li class="list-group-item">
+                    Transporte turístico
+                </li>
+
+                <li class="list-group-item">
+                    Guía certificado
+                </li>
+
+                <li class="list-group-item">
+                    Fotografías del recorrido
+                </li>
+
+                <li class="list-group-item">
+                    Asistencia durante todo el tour
+                </li>
+
+            </ul>
+
+            <div class="d-flex gap-3">
+
+                <a class="btn btn-primary btn-lg" [routerLink]="['/reservar', tour.id]">
+                    Reservar Ahora
+                </a>
+
+                <a routerLink="/tours" class="btn btn-outline-secondary btn-lg">
+
+                    Volver
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<ng-template #noTour>
+    <div class="container py-5 text-center">
+        <h2 class="fw-bold mb-3">Tour no encontrado</h2>
+        <p class="text-muted mb-4">El tour que intentaste ver no existe o ya no está disponible.</p>
+        <a class="btn btn-primary" routerLink="/tours">Volver a Tours</a>
+    </div>
+</ng-template>
