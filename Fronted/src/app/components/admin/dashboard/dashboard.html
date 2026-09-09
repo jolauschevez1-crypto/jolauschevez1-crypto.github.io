@@ -1,0 +1,265 @@
+<section class="admin-page">
+  <header class="admin-heading">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Resumen general del sistema turístico.</p>
+    </div>
+
+    <button type="button" class="btn btn-primary" [disabled]="cargando()" (click)="cargar()">
+      Actualizar
+    </button>
+  </header>
+
+  <div *ngIf="error()" class="alert alert-danger">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="cargando()" class="alert alert-info">Cargando información...</div>
+
+  <div *ngIf="datos() as d" class="stats-grid">
+    <article class="stat-card">
+      <strong>{{ d.usuarios }}</strong>
+      <span>Usuarios activos</span>
+    </article>
+
+    <article class="stat-card">
+      <strong>{{ d.tours }}</strong>
+      <span>Tours activos</span>
+    </article>
+
+    <article class="stat-card">
+      <strong>{{ d.reservas }}</strong>
+      <span>Total reservas</span>
+    </article>
+
+    <article class="stat-card">
+      <strong>{{ d.reservas_pendientes }}</strong>
+      <span>Reservas pendientes</span>
+    </article>
+
+    <article class="stat-card">
+      <strong>{{ d.pagos_pendientes }}</strong>
+      <span>Pagos por revisar</span>
+    </article>
+
+    <article class="stat-card">
+      <strong>
+        {{ d.ingresos | currency: 'USD' : 'symbol' : '1.2-2' }}
+      </strong>
+      <span>Ingresos aprobados</span>
+    </article>
+  </div>
+
+  <article class="panel-card">
+    <h2>Últimas reservas</h2>
+
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Tour</th>
+            <th>Fecha</th>
+            <th>Personas</th>
+            <th>Total</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let reserva of ultimas()">
+            <td>{{ reserva.usuario }}</td>
+            <td>{{ reserva.tour }}</td>
+            <td>{{ reserva.fecha_tour | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ reserva.cantidad_personas }}</td>
+            <td>{{ reserva.precio_total | currency: 'USD' : 'symbol' : '1.2-2' }}</td>
+            <td>{{ reserva.estado }}</td>
+          </tr>
+
+          <tr *ngIf="ultimas().length === 0">
+            <td colspan="6" class="text-center">No hay reservas registradas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <div class="panels-grid">
+    <article class="panel-card">
+      <h2>Actividad reciente</h2>
+
+      <div *ngIf="errorActividad()" class="alert alert-danger">{{ errorActividad() }}</div>
+
+      <ng-container *ngIf="!errorActividad()">
+        <ul class="timeline" *ngIf="actividadReciente().length > 0">
+          <li class="timeline-item" *ngFor="let item of actividadReciente()">
+            <span class="timeline-dot" [style.background]="colorTipo(item.tipo)"></span>
+
+            <div class="timeline-content">
+              <div class="timeline-row">
+                <span class="timeline-label"
+                  >{{ etiquetaTipo(item.tipo) }} #{{ item.id_referencia }}</span
+                >
+                <span class="timeline-time" [title]="item.fecha_cambio | date: 'dd/MM/yyyy HH:mm'">
+                  {{ tiempoRelativo(item.fecha_cambio) }}
+                </span>
+              </div>
+
+              <div class="timeline-states">
+                <span
+                  class="badge"
+                  [ngClass]="claseEstado(item.estado_anterior)"
+                  *ngIf="item.estado_anterior"
+                >
+                  {{ item.estado_anterior }}
+                </span>
+                <span class="timeline-arrow" *ngIf="item.estado_anterior">→</span>
+                <span class="badge" [ngClass]="claseEstado(item.estado_nuevo)">{{
+                  item.estado_nuevo
+                }}</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="empty-state" *ngIf="actividadReciente().length === 0">
+          <svg
+            class="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 3" />
+          </svg>
+          <p>Todavía no hay movimientos registrados.</p>
+        </div>
+      </ng-container>
+    </article>
+
+    <article class="panel-card">
+      <h2>Próximos tours confirmados</h2>
+
+      <div *ngIf="errorProximos()" class="alert alert-danger">{{ errorProximos() }}</div>
+
+      <ng-container *ngIf="!errorProximos()">
+        <ul class="simple-list" *ngIf="proximosTours().length > 0">
+          <li class="simple-list-item" *ngFor="let tour of proximosTours()">
+            <div class="simple-list-main">
+              <span class="simple-list-title">{{ tour.nombre }}</span>
+              <span class="simple-list-sub"
+                >{{ tour.fecha_tour | date: 'dd/MM/yyyy' }} · {{ diasHasta(tour.fecha_tour) }}</span
+              >
+            </div>
+            <span class="count-badge count-badge-info">
+              {{ tour.reservas_confirmadas }} res · {{ tour.personas_confirmadas }} pers
+            </span>
+          </li>
+        </ul>
+
+        <div class="empty-state" *ngIf="proximosTours().length === 0">
+          <svg
+            class="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+          >
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M3 10h18M8 3v4M16 3v4" />
+          </svg>
+          <p>No hay tours confirmados a futuro todavía.</p>
+        </div>
+      </ng-container>
+    </article>
+
+    <article class="panel-card">
+      <h2>Clientes frecuentes</h2>
+
+      <div *ngIf="errorClientes()" class="alert alert-danger">{{ errorClientes() }}</div>
+
+      <ng-container *ngIf="!errorClientes()">
+        <ul class="rank-list" *ngIf="clientesFrecuentes().length > 0">
+          <li class="rank-item" *ngFor="let cliente of clientesFrecuentes(); let i = index">
+            <span
+              class="rank-number"
+              [class.rank-gold]="i === 0"
+              [class.rank-silver]="i === 1"
+              [class.rank-bronze]="i === 2"
+              >{{ i + 1 }}</span
+            >
+
+            <span class="rank-avatar" [style.background]="colorAvatar(cliente.turista)">
+              {{ inicialesCliente(cliente.turista) }}
+            </span>
+
+            <div class="rank-info">
+              <span class="rank-name">{{ cliente.turista }}</span>
+              <div class="rank-bar-track">
+                <div
+                  class="rank-bar-fill"
+                  [style.width.%]="(cliente.total_reservas / maxReservasCliente()) * 100"
+                ></div>
+              </div>
+            </div>
+
+            <div class="rank-meta">
+              <strong>{{ cliente.total_reservas }}</strong>
+              <span>{{ cliente.gasto_total | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="empty-state" *ngIf="clientesFrecuentes().length === 0">
+          <svg
+            class="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+          >
+            <circle cx="12" cy="8" r="3.2" />
+            <path d="M5 20c0-3.6 3-6 7-6s7 2.4 7 6" />
+          </svg>
+          <p>Todavía no hay suficientes reservas para este reporte.</p>
+        </div>
+      </ng-container>
+    </article>
+
+    <article class="panel-card">
+      <h2>Tours con bajo rendimiento</h2>
+
+      <div *ngIf="errorBajoRendimiento()" class="alert alert-danger">
+        {{ errorBajoRendimiento() }}
+      </div>
+
+      <ng-container *ngIf="!errorBajoRendimiento()">
+        <ul class="simple-list" *ngIf="toursBajoRendimiento().length > 0">
+          <li class="simple-list-item" *ngFor="let tour of toursBajoRendimiento()">
+            <div class="simple-list-main">
+              <span class="simple-list-title">{{ tour.nombre }}</span>
+              <span class="simple-list-sub">{{ tour.fecha_tour | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <span class="count-badge" [class.count-badge-zero]="tour.total_reservas === 0">
+              {{ tour.total_reservas }} {{ tour.total_reservas === 1 ? 'reserva' : 'reservas' }}
+            </span>
+          </li>
+        </ul>
+
+        <div class="empty-state" *ngIf="toursBajoRendimiento().length === 0">
+          <svg
+            class="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+          >
+            <path d="M4 16l5-5 4 4 7-7M20 8h-4M20 8v4" />
+          </svg>
+          <p>Todos los tours activos tienen reservas.</p>
+        </div>
+      </ng-container>
+    </article>
+  </div>
+</section>

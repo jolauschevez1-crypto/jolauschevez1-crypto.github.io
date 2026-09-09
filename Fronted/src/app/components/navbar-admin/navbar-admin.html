@@ -1,0 +1,137 @@
+<aside class="admin-sidebar">
+  <div class="sidebar-pattern"></div>
+
+  <header class="sidebar-brand">
+    <div class="logo-shell">
+      <img src="/sigt.png" alt="Logo SITG" />
+    </div>
+
+    <div class="brand-copy">
+      <h2>SITG</h2>
+      <span>Panel administrativo</span>
+    </div>
+  </header>
+
+  <nav class="sidebar-navigation" aria-label="Navegación administrativa">
+    <!-- GENERAL -->
+    <section class="menu-section">
+      <div class="section-title">
+        <span>General</span>
+        <i></i>
+      </div>
+
+      <a
+        routerLink="/admin/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{
+          exact: true,
+        }"
+        class="menu-item"
+      >
+        <span class="menu-icon">
+          <img src="/dashboard.png" alt="" />
+        </span>
+
+        <span class="menu-label"> Dashboard </span>
+
+        <span class="menu-arrow">›</span>
+      </a>
+    </section>
+
+    <!-- GESTIÓN -->
+    <section class="menu-section">
+      <div class="section-title">
+        <span>Gestión</span>
+        <i></i>
+      </div>
+
+      <a routerLink="/admin/tours" routerLinkActive="active" class="menu-item">
+        <span class="menu-icon">
+          <img src="/tuour.png" alt="" />
+        </span>
+
+        <span class="menu-label"> Tours </span>
+
+        <span class="menu-arrow">›</span>
+      </a>
+
+      <a routerLink="/admin/categorias" routerLinkActive="active" class="menu-item">
+        <span class="menu-icon">
+          <img src="/categoria.png" alt="" />
+        </span>
+
+        <span class="menu-label"> Categorías </span>
+
+        <span class="menu-arrow">›</span>
+      </a>
+
+      <a routerLink="/admin/reservas" routerLinkActive="active" class="menu-item">
+        <span class="menu-icon">
+          <img src="/reserva.png" alt="" />
+        </span>
+
+        <span class="menu-label"> Reservas </span>
+
+        <span class="menu-arrow">›</span>
+      </a>
+
+      <a routerLink="/admin/pagos" routerLinkActive="active" class="menu-item">
+        <span class="menu-icon">
+          <img src="/pago.png" alt="" />
+        </span>
+
+        <span class="menu-label"> Pagos </span>
+
+        <span class="menu-arrow">›</span>
+      </a>
+
+      <a routerLink="/admin/usuarios" routerLinkActive="active" class="menu-item">
+        <span class="menu-icon">
+          <img src="/usuarios.jpg" alt="" />
+        </span>
+
+        <span class="menu-label"> Usuarios </span>
+
+        <span class="menu-arrow">›</span>
+      </a>
+
+      <a routerLink="/admin/reportes" routerLinkActive="active" class="menu-item">
+        <span class="menu-icon">
+          <img src="/reportes.png" alt="" />
+        </span>
+
+        <span class="menu-label"> Reportes </span>
+
+        <span class="menu-arrow">›</span>
+      </a>
+    </section>
+
+    <!-- CUENTA -->
+    <section class="menu-section account-section">
+      <div class="section-title">
+        <span>Cuenta</span>
+        <i></i>
+      </div>
+
+      <a routerLink="/admin/perfil" routerLinkActive="active" class="menu-item">
+        <span class="menu-icon">
+          <img src="/usuarios.jpg" alt="" />
+        </span>
+
+        <span class="menu-label"> Mi perfil </span>
+
+        <span class="menu-arrow">›</span>
+      </a>
+
+      <button type="button" class="menu-item logout-item" (click)="logout()">
+        <span class="menu-icon">
+          <img src="/cerrar.png" alt="" />
+        </span>
+
+        <span class="menu-label"> Cerrar sesión </span>
+
+        <span class="menu-arrow">›</span>
+      </button>
+    </section>
+  </nav>
+</aside>

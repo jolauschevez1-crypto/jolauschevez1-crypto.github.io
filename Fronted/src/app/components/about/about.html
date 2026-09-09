@@ -1,0 +1,128 @@
+<section class="about-hero">
+  <div class="about-hero-overlay">
+    <div class="container about-hero-content">
+      <span class="about-chip">Conoce SITG</span>
+
+      <h1>
+        Somos una plataforma pensada para descubrir y reservar experiencias turísticas en Guayaquil
+      </h1>
+
+      <p>
+        En SITG conectamos a los viajeros con recorridos históricos, culturales, ecológicos y
+        gastronómicos de forma simple, rápida y segura.
+      </p>
+
+      <div class="about-stats">
+        <article class="stat-card" *ngFor="let cifra of cifras">
+          <strong>{{ cifra.valor }}</strong>
+          <span>{{ cifra.texto }}</span>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <span class="section-label">Quiénes somos</span>
+
+        <h2 class="section-title">
+          Una plataforma turística moderna, enfocada en experiencia, confianza y facilidad de uso
+        </h2>
+
+        <p class="section-text">
+          SITG nace con el objetivo de facilitar la forma en que las personas descubren destinos,
+          consultan información y reservan tours dentro de Guayaquil.
+        </p>
+
+        <p class="section-text">
+          Nuestro sistema permite explorar recorridos, revisar detalles, guardar favoritos,
+          gestionar reservas, registrar pagos y administrar la información desde un panel de
+          control.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <h3>Nuestra misión</h3>
+        <p>
+          Brindar una experiencia digital profesional para promover el turismo local y facilitar la
+          gestión de tours, reservas y pagos.
+        </p>
+
+        <h3>Nuestra visión</h3>
+        <p>
+          Ser una plataforma referente en la organización y promoción de experiencias turísticas,
+          destacando la cultura y atractivos de Guayaquil.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="values-section">
+  <div class="container">
+    <div class="values-header">
+      <div>
+        <span class="section-label">Nuestros valores</span>
+        <h2 class="section-title">Lo que define a SITG</h2>
+      </div>
+    </div>
+
+    <div class="values-list">
+      <article class="value-item" *ngFor="let valor of valores">
+        <div class="value-icon">
+          {{ valor.icono }}
+        </div>
+
+        <div>
+          <h3>{{ valor.titulo }}</h3>
+          <p>{{ valor.descripcion }}</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="team-section">
+  <div class="container">
+    <div class="team-header">
+      <span class="section-label">Nuestro equipo</span>
+      <h2 class="section-title">Personas que construyen la experiencia</h2>
+      <p class="section-text centered">
+        Detrás de SITG hay un equipo que trabaja para que la plataforma sea clara, útil y
+        profesional.
+      </p>
+    </div>
+
+    <div class="team-grid">
+      <article class="team-card" *ngFor="let miembro of equipo">
+        <div class="team-image-wrap">
+          <img [src]="miembro.imagen" [alt]="miembro.nombre" class="team-image" />
+        </div>
+
+        <div class="team-body">
+          <h3>{{ miembro.nombre }}</h3>
+          <p>{{ miembro.cargo }}</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="about-cta">
+  <div class="container">
+    <div class="cta-card">
+      <div>
+        <span class="section-label light"> Explora Guayaquil </span>
+
+        <h2>Descubre experiencias únicas con SITG</h2>
+
+        <p>Conoce nuestros recorridos y encuentra la experiencia ideal para tu próxima aventura.</p>
+      </div>
+
+      <a routerLink="/tours" class="cta-button"> Ver tours </a>
+    </div>
+  </div>
+</section>

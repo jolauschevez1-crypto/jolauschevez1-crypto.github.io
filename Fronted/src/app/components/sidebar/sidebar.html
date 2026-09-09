@@ -1,0 +1,124 @@
+<aside class="sidebar">
+  <header class="sidebar-brand">
+    <div class="logo-wrapper">
+      <img src="/sigt.png" alt="SITG" class="logo" />
+    </div>
+
+    <h2>SITG</h2>
+    <p>Explora Guayaquil</p>
+    <span class="brand-line"></span>
+  </header>
+
+  <nav class="sidebar-navigation">
+    <div class="menu-section-title">
+      <span>Navegación</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="sidebar-menu">
+      <a
+        class="menu-item"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLink]="['/inicio']"
+      >
+        <span class="icon-shell">
+          <img src="/inicio.png" class="menu-icon" alt="" />
+        </span>
+
+        <span class="item-text">Inicio</span>
+        <span class="item-arrow">›</span>
+      </a>
+
+      <a
+        *ngIf="auth.isLoggedIn()"
+        class="menu-item"
+        routerLinkActive="active"
+        [routerLink]="['/tours']"
+      >
+        <span class="icon-shell">
+          <img src="/guia.png" class="menu-icon" alt="" />
+        </span>
+
+        <span class="item-text">Tours</span>
+        <span class="item-arrow">›</span>
+      </a>
+
+      <a
+        *ngIf="auth.isLoggedIn()"
+        class="menu-item"
+        routerLinkActive="active"
+        [routerLink]="['/appmovil']"
+      >
+        <span class="icon-shell">
+          <img src="/appm.png" class="menu-icon" alt="" />
+        </span>
+
+        <span class="item-text">App Móvil</span>
+        <span class="item-arrow">›</span>
+      </a>
+
+      <a
+        *ngIf="auth.isLoggedIn()"
+        class="menu-item"
+        routerLinkActive="active"
+        [routerLink]="['/reservas']"
+      >
+        <span class="icon-shell">
+          <img src="/reserva.png" class="menu-icon" alt="" />
+        </span>
+
+        <span class="item-text">Reservas</span>
+        <span class="item-arrow">›</span>
+      </a>
+
+      <a class="menu-item" routerLinkActive="active" [routerLink]="['/favoritos']">
+        <span class="icon-shell">
+          <img src="/favorito.png" class="menu-icon" alt="" />
+        </span>
+
+        <span class="item-text">Favoritos</span>
+        <span class="item-arrow">›</span>
+      </a>
+
+      <a
+        *ngIf="!auth.isLoggedIn()"
+        class="menu-item"
+        routerLinkActive="active"
+        [routerLink]="['/login']"
+      >
+        <span class="icon-shell">
+          <img src="/gente.png" class="menu-icon" alt="" />
+        </span>
+
+        <span class="item-text">Iniciar Sesión</span>
+        <span class="item-arrow">›</span>
+      </a>
+    </div>
+
+    <div *ngIf="auth.isLoggedIn()" class="sidebar-account">
+      <div class="menu-section-title account-title">
+        <span>Cuenta</span>
+        <div class="section-line"></div>
+      </div>
+
+      <a class="menu-item" routerLinkActive="active" [routerLink]="['/perfil']">
+        <span class="icon-shell">
+          <img src="/gente.png" class="menu-icon" alt="" />
+        </span>
+
+        <span class="item-text">Perfil</span>
+        <span class="item-arrow">›</span>
+      </a>
+
+      <button type="button" class="menu-item logout-item" (click)="logout()">
+        <span class="icon-shell logout-icon-shell">
+          <img src="/cerrar.png" class="menu-icon" alt="" />
+        </span>
+
+        <span class="item-text">Cerrar Sesión</span>
+        <span class="item-arrow">›</span>
+      </button>
+    </div>
+  </nav>
+</aside>

@@ -1,0 +1,400 @@
+<section class="admin-page">
+  <header class="admin-heading">
+    <div>
+      <span class="admin-tag">Administración</span>
+      <h1>Gestionar tours</h1>
+      <p>
+        Crea, edita, activa y desactiva los tours, incluyendo todos los detalles mostrados al
+        usuario.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        [disabled]="cargando()"
+        (click)="cargarTodo()"
+      >
+        Recargar
+      </button>
+
+      <button type="button" class="btn btn-primary" (click)="nuevo()">Nuevo tour</button>
+    </div>
+  </header>
+
+  <div *ngIf="error()" class="alert alert-danger">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="mensaje()" class="alert alert-success">
+    {{ mensaje() }}
+  </div>
+
+  <form *ngIf="mostrarFormulario" class="form-card" (ngSubmit)="guardar()">
+    <div class="form-heading">
+      <div>
+        <span>Formulario</span>
+        <h2>
+          {{ editandoId ? 'Editar tour' : 'Crear tour' }}
+        </h2>
+      </div>
+
+      <button type="button" class="btn-close" aria-label="Cerrar" (click)="cancelar()"></button>
+    </div>
+
+    <fieldset>
+      <legend>Información principal</legend>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="categoriaTour" class="form-label"> Categoría </label>
+          <select
+            id="categoriaTour"
+            class="form-select"
+            name="idCategoria"
+            [(ngModel)]="formulario.idCategoria"
+            required
+          >
+            <option [ngValue]="null">Selecciona una categoría</option>
+            <option *ngFor="let categoria of categorias()" [ngValue]="categoria.id_categoria">
+              {{ categoria.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label for="nombreTour" class="form-label"> Nombre </label>
+          <input
+            id="nombreTour"
+            class="form-control"
+            name="nombre"
+            [(ngModel)]="formulario.nombre"
+            required
+          />
+        </div>
+
+        <div class="col-12">
+          <label for="descripcionTour" class="form-label"> Descripción </label>
+          <textarea
+            id="descripcionTour"
+            class="form-control"
+            name="descripcion"
+            rows="4"
+            [(ngModel)]="formulario.descripcion"
+            required
+          ></textarea>
+        </div>
+
+        <div class="col-md-4">
+          <label for="fechaTour" class="form-label"> Fecha </label>
+          <input
+            id="fechaTour"
+            class="form-control"
+            type="date"
+            name="fechaTour"
+            [(ngModel)]="formulario.fechaTour"
+            required
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="cupoTour" class="form-label"> Cupo total </label>
+          <input
+            id="cupoTour"
+            class="form-control"
+            type="number"
+            min="1"
+            name="cupoTotal"
+            [(ngModel)]="formulario.cupoTotal"
+            required
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="precioTour" class="form-label"> Precio adulto </label>
+          <input
+            id="precioTour"
+            class="form-control"
+            type="number"
+            min="0.01"
+            step="0.01"
+            name="precio"
+            [(ngModel)]="formulario.precio"
+            required
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="duracionTour" class="form-label"> Duración en horas </label>
+          <input
+            id="duracionTour"
+            class="form-control"
+            type="number"
+            min="0.5"
+            step="0.5"
+            name="duracionHoras"
+            [(ngModel)]="formulario.duracionHoras"
+            required
+          />
+        </div>
+
+        <div class="col-md-8">
+          <label for="encuentroTour" class="form-label"> Punto de encuentro </label>
+          <input
+            id="encuentroTour"
+            class="form-control"
+            name="puntoEncuentro"
+            [(ngModel)]="formulario.puntoEncuentro"
+          />
+        </div>
+
+        <div class="col-12">
+          <label for="imagenTour" class="form-label"> Imagen </label>
+          <input
+            id="imagenTour"
+            class="form-control"
+            name="imagen"
+            placeholder="tour_malecon.jpg o /guayaquilcompleto.jpg"
+            [(ngModel)]="formulario.imagen"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Detalles de la experiencia</legend>
+
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="idiomaTour" class="form-label"> Idioma </label>
+          <input
+            id="idiomaTour"
+            class="form-control"
+            name="idioma"
+            [(ngModel)]="formulario.idioma"
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="anticipacionTour" class="form-label"> Horas de anticipación </label>
+          <input
+            id="anticipacionTour"
+            class="form-control"
+            type="number"
+            min="0"
+            name="horasAnticipacion"
+            [(ngModel)]="formulario.horasAnticipacion"
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="bonoTour" class="form-label"> Tipo de bono </label>
+          <input
+            id="bonoTour"
+            class="form-control"
+            name="tipoBono"
+            [(ngModel)]="formulario.tipoBono"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <label for="precioMenorTour" class="form-label"> Precio menor </label>
+          <input
+            id="precioMenorTour"
+            class="form-control"
+            type="number"
+            min="0"
+            step="0.01"
+            name="precioMenor"
+            [(ngModel)]="formulario.precioMenor"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <label for="edadGratisTour" class="form-label"> Edad límite para menores </label>
+          <input
+            id="edadGratisTour"
+            class="form-control"
+            type="number"
+            min="0"
+            name="edadGratis"
+            [(ngModel)]="formulario.edadGratis"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <label for="incluidoTour" class="form-label"> Incluido </label>
+          <textarea
+            id="incluidoTour"
+            class="form-control"
+            name="incluido"
+            rows="5"
+            [(ngModel)]="formulario.incluido"
+          ></textarea>
+          <small>Escribe un elemento por línea.</small>
+        </div>
+
+        <div class="col-md-6">
+          <label for="noIncluidoTour" class="form-label"> No incluido </label>
+          <textarea
+            id="noIncluidoTour"
+            class="form-control"
+            name="noIncluido"
+            rows="5"
+            [(ngModel)]="formulario.noIncluido"
+          ></textarea>
+          <small>Escribe un elemento por línea.</small>
+        </div>
+
+        <div class="col-md-6">
+          <label for="accesibilidadTour" class="form-label"> Accesibilidad </label>
+          <textarea
+            id="accesibilidadTour"
+            class="form-control"
+            name="accesibilidad"
+            rows="3"
+            [(ngModel)]="formulario.accesibilidad"
+          ></textarea>
+        </div>
+
+        <div class="col-md-6">
+          <label for="sostenibilidadTour" class="form-label"> Sostenibilidad </label>
+          <textarea
+            id="sostenibilidadTour"
+            class="form-control"
+            name="sostenibilidad"
+            rows="3"
+            [(ngModel)]="formulario.sostenibilidad"
+          ></textarea>
+        </div>
+
+        <div class="col-12">
+          <label for="indicacionesTour" class="form-label"> Indicaciones para el visitante </label>
+          <textarea
+            id="indicacionesTour"
+            class="form-control"
+            name="indicaciones"
+            rows="3"
+            [(ngModel)]="formulario.indicaciones"
+          ></textarea>
+        </div>
+
+        <div class="col-12">
+          <div class="form-check">
+            <input
+              id="tourActivo"
+              class="form-check-input"
+              type="checkbox"
+              name="activo"
+              [(ngModel)]="formulario.activo"
+            />
+            <label for="tourActivo" class="form-check-label"> Tour activo </label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-success" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : editandoId ? 'Guardar cambios' : 'Crear tour' }}
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        [disabled]="guardando()"
+        (click)="cancelar()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+
+  <article class="panel-card">
+    <div *ngIf="cargando()" class="alert alert-info">Cargando tours...</div>
+
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Tour</th>
+            <th>Categoría</th>
+            <th>Fecha</th>
+            <th>Cupos</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let tour of tours()">
+            <td>
+              <div class="tour-name">
+                <img [src]="obtenerImagen(tour)" [alt]="tour.nombre" />
+                <div>
+                  <strong>{{ tour.nombre }}</strong>
+                  <small>{{ tour.duracionHoras }} hora(s)</small>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              {{ tour.categoria }}
+              <span *ngIf="!tour.categoriaActiva" class="badge text-bg-warning">
+                Categoría inactiva
+              </span>
+            </td>
+
+            <td>{{ tour.fechaTour | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ tour.cuposDisponibles }} / {{ tour.cupoTotal }}</td>
+            <td>{{ tour.precio | currency: 'USD' : 'symbol' : '1.2-2' }}</td>
+            <td>
+              <span class="badge" [ngClass]="tour.activo ? 'text-bg-success' : 'text-bg-secondary'">
+                {{ tour.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+
+            <td>
+              <div class="table-actions">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  [disabled]="procesandoId() === tour.idTour"
+                  (click)="editar(tour)"
+                >
+                  Editar
+                </button>
+
+                <button
+                  *ngIf="tour.activo"
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                  [disabled]="procesandoId() === tour.idTour"
+                  (click)="desactivar(tour)"
+                >
+                  Desactivar
+                </button>
+
+                <button
+                  *ngIf="!tour.activo"
+                  type="button"
+                  class="btn btn-outline-success btn-sm"
+                  [disabled]="procesandoId() === tour.idTour || !tour.categoriaActiva"
+                  (click)="activar(tour)"
+                >
+                  Activar
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="!cargando() && tours().length === 0">
+            <td colspan="7" class="text-center py-4">No hay tours registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>

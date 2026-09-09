@@ -1,0 +1,109 @@
+.phone-preview {
+  width: min(100%, 360px);
+  height: auto;
+  max-height: 640px;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 38px;
+  background: #ffffff;
+  box-shadow:
+    0 24px 55px rgba(15, 23, 42, 0.18),
+    0 8px 20px rgba(13, 110, 253, 0.1);
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.phone-preview:hover {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow:
+    0 32px 70px rgba(15, 23, 42, 0.23),
+    0 12px 28px rgba(13, 110, 253, 0.16);
+}
+
+/* Botón principal */
+.btn-download {
+  min-height: 52px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0d6efd, #3d8bfd);
+  box-shadow: 0 12px 26px rgba(13, 110, 253, 0.26);
+  font-size: 0.95rem;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.btn-download:hover {
+  color: #ffffff;
+  background: linear-gradient(135deg, #075fd3, #2478f4);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(13, 110, 253, 0.34);
+}
+
+.btn-download:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 7px 16px rgba(13, 110, 253, 0.22);
+}
+
+.btn-download:focus-visible {
+  outline: 3px solid rgba(13, 110, 253, 0.25);
+  outline-offset: 4px;
+}
+
+/* Contenedor opcional para la imagen */
+.phone-preview-container {
+  position: relative;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 28px;
+  background: radial-gradient(circle at center, rgba(13, 110, 253, 0.12), transparent 68%);
+}
+
+.phone-preview-container::before {
+  content: '';
+  position: absolute;
+  width: 310px;
+  height: 310px;
+  border-radius: 50%;
+  background: rgba(13, 110, 253, 0.09);
+  filter: blur(15px);
+}
+
+/* La imagen queda delante del fondo */
+.phone-preview-container .phone-preview {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .phone-preview {
+    width: min(100%, 300px);
+    max-height: 560px;
+    border-radius: 32px;
+  }
+
+  .phone-preview-container {
+    margin-top: 28px;
+    padding: 18px;
+  }
+
+  .btn-download {
+    width: 100%;
+  }
+}

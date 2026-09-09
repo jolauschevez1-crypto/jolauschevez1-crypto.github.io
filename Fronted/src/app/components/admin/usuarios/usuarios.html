@@ -1,0 +1,188 @@
+<section class="admin-page">
+  <header class="admin-heading">
+    <div>
+      <h1>Gestionar usuarios</h1>
+
+      <p>Crea, edita, desactiva y asigna roles a las cuentas del sistema.</p>
+    </div>
+
+    <button type="button" class="btn btn-primary" (click)="nuevo()">Nuevo usuario</button>
+  </header>
+
+  <div *ngIf="error()" class="alert alert-danger" role="alert">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="mensaje()" class="alert alert-success" role="status">
+    {{ mensaje() }}
+  </div>
+
+  <form *ngIf="mostrarFormulario" class="form-card mb-4" (ngSubmit)="guardar()">
+    <h2>
+      {{ editandoId ? 'Editar usuario' : 'Nuevo usuario' }}
+    </h2>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label"> Nombre </label>
+
+        <input class="form-control" name="nombre" [(ngModel)]="formulario.nombre" required />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label"> Apellido </label>
+
+        <input class="form-control" name="apellido" [(ngModel)]="formulario.apellido" required />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label"> Correo </label>
+
+        <input
+          class="form-control"
+          type="email"
+          name="correo"
+          [(ngModel)]="formulario.correo"
+          required
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label"> Teléfono </label>
+
+        <input class="form-control" name="telefono" [(ngModel)]="formulario.telefono" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">
+          {{ editandoId ? 'Nueva contraseña, opcional' : 'Contraseña' }}
+        </label>
+
+        <input
+          class="form-control"
+          type="password"
+          name="password"
+          [(ngModel)]="formulario.password"
+        />
+      </div>
+
+      <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check mb-2">
+          <input
+            id="usuarioActivo"
+            class="form-check-input"
+            type="checkbox"
+            name="activo"
+            [(ngModel)]="formulario.activo"
+          />
+
+          <label class="form-check-label" for="usuarioActivo"> Usuario activo </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+      <button class="btn btn-success" type="submit">Guardar</button>
+
+      <button class="btn btn-outline-secondary" type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+
+  <article class="panel-card">
+    <div *ngIf="cargando()" class="alert alert-info">Cargando usuarios...</div>
+
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let usuario of usuarios()">
+            <td>
+              {{ usuario.nombre }}
+              {{ usuario.apellido }}
+
+              <small *ngIf="usuario.es_admin_actual" class="self-role-note"> Tu cuenta </small>
+            </td>
+
+            <td>
+              {{ usuario.correo }}
+            </td>
+
+            <td>
+              {{ usuario.telefono || '-' }}
+            </td>
+
+            <td>
+              <span
+                class="role-badge"
+                [ngClass]="usuario.rol === 'admin' ? 'role-admin' : 'role-user'"
+              >
+                {{ usuario.rol === 'admin' ? 'Administrador' : 'Usuario' }}
+              </span>
+            </td>
+
+            <td>
+              <span
+                class="badge"
+                [ngClass]="usuario.activo ? 'text-bg-success' : 'text-bg-secondary'"
+              >
+                {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+
+            <td>
+              <div class="d-flex gap-2 action-cell">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm edit-action"
+                  (click)="editar(usuario)"
+                >
+                  Editar
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-sm role-action"
+                  [class.promote-action]="usuario.rol !== 'admin'"
+                  [class.demote-action]="usuario.rol === 'admin'"
+                  [disabled]="
+                    procesandoRolId() === usuario.id_usuario ||
+                    usuario.es_admin_actual ||
+                    (usuario.rol !== 'admin' && !usuario.activo)
+                  "
+                  (click)="cambiarRol(usuario)"
+                >
+                  {{
+                    procesandoRolId() === usuario.id_usuario
+                      ? 'Cambiando...'
+                      : usuario.rol === 'admin'
+                        ? 'Hacer usuario'
+                        : 'Hacer admin'
+                  }}
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm deactivate-action"
+                  [disabled]="!usuario.activo || usuario.es_admin_actual"
+                  (click)="eliminar(usuario)"
+                >
+                  Desactivar
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>

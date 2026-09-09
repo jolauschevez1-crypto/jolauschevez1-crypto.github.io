@@ -1,0 +1,298 @@
+<section class="admin-page">
+  <!-- ENCABEZADO -->
+  <header class="admin-heading">
+    <div>
+      <span class="admin-tag"> Administración </span>
+
+      <h1>Gestionar reservas</h1>
+
+      <p>Crea, consulta, actualiza y cancela las reservas del sistema.</p>
+    </div>
+
+    <button type="button" class="new-reservation-button" (click)="nueva()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 5v14M5 12h14"></path>
+      </svg>
+
+      Nueva reserva
+    </button>
+  </header>
+
+  <!-- MENSAJES -->
+  <div *ngIf="error()" class="alert-message error-message" role="alert">
+    <span class="alert-icon">!</span>
+    {{ error() }}
+  </div>
+
+  <div *ngIf="mensaje()" class="alert-message success-message" role="status">
+    <span class="alert-icon">✓</span>
+    {{ mensaje() }}
+  </div>
+
+  <!-- FORMULARIO -->
+  <form *ngIf="mostrarFormulario" class="form-card" (ngSubmit)="guardar()">
+    <header class="form-heading">
+      <div>
+        <span class="form-tag">
+          {{ editandoId ? 'Actualizar información' : 'Registrar información' }}
+        </span>
+
+        <h2>
+          {{ editandoId ? 'Editar reserva' : 'Nueva reserva' }}
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        class="close-form-button"
+        aria-label="Cerrar formulario"
+        (click)="cancelarFormulario()"
+      >
+        ×
+      </button>
+    </header>
+
+    <div class="form-grid">
+      <div class="field-group">
+        <label for="usuarioReserva"> Usuario </label>
+
+        <select
+          id="usuarioReserva"
+          class="form-select"
+          name="idUsuario"
+          [(ngModel)]="formulario.idUsuario"
+        >
+          <option [ngValue]="null">Selecciona un usuario</option>
+
+          <option *ngFor="let usuario of usuarios()" [ngValue]="usuario.id_usuario">
+            {{ usuario.nombre }}
+            {{ usuario.apellido }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="tourReserva"> Tour </label>
+
+        <select id="tourReserva" class="form-select" name="idTour" [(ngModel)]="formulario.idTour">
+          <option [ngValue]="null">Selecciona un tour</option>
+
+          <option *ngFor="let tour of tours()" [ngValue]="tour.idTour">
+            {{ tour.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="fechaReserva"> Fecha del tour </label>
+
+        <input
+          id="fechaReserva"
+          class="form-control"
+          type="date"
+          name="fechaTour"
+          [(ngModel)]="formulario.fechaTour"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="personasReserva"> Cantidad de personas </label>
+
+        <input
+          id="personasReserva"
+          class="form-control"
+          type="number"
+          min="1"
+          name="cantidadPersonas"
+          [(ngModel)]="formulario.cantidadPersonas"
+        />
+      </div>
+
+      <div class="field-group full-width">
+        <label for="estadoReserva"> Estado de la reserva </label>
+
+        <select
+          id="estadoReserva"
+          class="form-select"
+          name="estado"
+          [(ngModel)]="formulario.estado"
+        >
+          <option value="Pendiente">Pendiente</option>
+
+          <option value="Confirmada">Confirmada</option>
+
+          <option value="Cancelada">Cancelada</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="save-button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 4h12l2 2v14H5V4Z"></path>
+          <path d="M8 4v6h8V4"></path>
+          <path d="M8 20v-6h8v6"></path>
+        </svg>
+
+        Guardar reserva
+      </button>
+
+      <button type="button" class="cancel-form-button" (click)="cancelarFormulario()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+
+  <!-- LISTADO -->
+  <article class="panel-card">
+    <header class="panel-heading">
+      <div>
+        <span class="panel-tag"> Registros </span>
+
+        <h2>Reservas registradas</h2>
+
+        <p>Consulta el estado de la reserva y de su pago.</p>
+      </div>
+
+      <span class="total-badge">
+        {{ reservas().length }}
+        {{ reservas().length === 1 ? 'reserva' : 'reservas' }}
+      </span>
+    </header>
+
+    <div *ngIf="cargando()" class="loading-state" role="status">
+      <span class="loader"></span>
+      Cargando reservas...
+    </div>
+
+    <div *ngIf="!cargando() && reservas().length === 0" class="empty-state">
+      <span class="empty-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+
+          <path d="M8 3v4M16 3v4M3 10h18"></path>
+        </svg>
+      </span>
+
+      <h3>No existen reservas</h3>
+
+      <p>Registra una nueva reserva para comenzar.</p>
+    </div>
+
+    <div *ngIf="!cargando() && reservas().length > 0" class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Tour</th>
+            <th>Fecha</th>
+            <th>Personas</th>
+            <th>Total</th>
+            <th>Reserva</th>
+            <th>Pago</th>
+            <th class="actions-heading">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let reserva of reservas()">
+            <td>
+              <div class="user-cell">
+                <span class="user-avatar">
+                  {{ (reserva.nombre_usuario || 'U').charAt(0) }}
+                </span>
+
+                <div>
+                  <strong>
+                    {{ reserva.nombre_usuario }}
+                  </strong>
+
+                  <small> Reserva #{{ reserva.id_reserva }} </small>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="tour-cell">
+                <strong>
+                  {{ reserva.nombre_tour }}
+                </strong>
+              </div>
+            </td>
+
+            <td>
+              <span class="date-value">
+                {{ reserva.fecha_tour | date: 'dd/MM/yyyy' }}
+              </span>
+            </td>
+
+            <td>
+              <span class="people-value">
+                {{ reserva.cantidad_personas }}
+              </span>
+            </td>
+
+            <td>
+              <strong class="price-value">
+                {{ reserva.precio_total | currency: 'USD' : 'symbol' : '1.2-2' }}
+              </strong>
+            </td>
+
+            <td>
+              <span
+                class="status-pill"
+                [class.status-pending]="reserva.estado === 'Pendiente'"
+                [class.status-confirmed]="reserva.estado === 'Confirmada'"
+                [class.status-cancelled]="reserva.estado === 'Cancelada'"
+              >
+                {{ reserva.estado }}
+              </span>
+            </td>
+
+            <td>
+              <span
+                class="payment-pill"
+                [class.payment-pending]="reserva.estado_pago === 'pendiente'"
+                [class.payment-paid]="reserva.estado_pago === 'pagado'"
+                [class.payment-rejected]="reserva.estado_pago === 'rechazado'"
+                [class.payment-refunded]="reserva.estado_pago === 'reembolsado'"
+                [class.payment-empty]="!reserva.estado_pago"
+              >
+                {{ reserva.estado_pago || 'Sin pago' }}
+              </span>
+            </td>
+
+            <td>
+              <div class="table-actions">
+                <button type="button" class="action-button edit-button" (click)="editar(reserva)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m4 20 4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20Z"></path>
+
+                    <path d="m14 7 3 3"></path>
+                  </svg>
+
+                  Editar
+                </button>
+
+                <button
+                  type="button"
+                  class="action-button delete-button"
+                  [disabled]="reserva.estado === 'Cancelada'"
+                  (click)="eliminar(reserva)"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 7h16"></path>
+                    <path d="M9 7V4h6v3"></path>
+                    <path d="M7 7l1 13h8l1-13"></path>
+                  </svg>
+
+                  Cancelar
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>

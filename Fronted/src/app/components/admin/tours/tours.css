@@ -1,0 +1,186 @@
+.admin-page {
+  min-height: 100vh;
+  padding: 2rem;
+  background: #f4f7fb;
+  box-sizing: border-box;
+}
+
+.admin-heading {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.admin-heading h1 {
+  margin: 0.2rem 0;
+  font-weight: 850;
+}
+
+.admin-heading p {
+  max-width: 700px;
+  margin: 0;
+  color: #64748b;
+}
+
+.admin-tag {
+  color: #0d6efd;
+  font-weight: 800;
+}
+
+.header-actions,
+.form-actions,
+.table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.form-card,
+.panel-card {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 0.6rem 1.8rem rgb(15 23 42 / 8%);
+  box-sizing: border-box;
+}
+
+.form-heading {
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.form-heading span {
+  color: #0d6efd;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.form-heading h2 {
+  margin: 0.2rem 0 0;
+  font-size: 1.45rem;
+  font-weight: 850;
+}
+
+fieldset {
+  margin: 0 0 1.4rem;
+  padding: 1.2rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.9rem;
+}
+
+legend {
+  float: none;
+  width: auto;
+  margin: 0 0 0.9rem;
+  padding: 0 0.35rem;
+  color: #1e293b;
+  font-size: 1.08rem;
+  font-weight: 800;
+}
+
+.form-card small {
+  display: block;
+  margin-top: 0.35rem;
+  color: #64748b;
+}
+
+.form-actions {
+  margin-top: 1.2rem;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 980px;
+  margin: 0;
+}
+
+.table th,
+.table td {
+  padding: 0.85rem;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table th:first-child,
+.table td:first-child {
+  min-width: 250px;
+  white-space: normal;
+}
+
+.tour-name {
+  width: 100%;
+  min-width: 230px;
+  max-width: 330px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tour-name > img {
+  width: 72px !important;
+  height: 54px !important;
+  min-width: 72px;
+  display: block;
+  object-fit: cover;
+  border-radius: 0.6rem;
+}
+
+.tour-name > div {
+  min-width: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.tour-name strong {
+  overflow: hidden;
+  color: #172033;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tour-name small {
+  color: #64748b;
+}
+
+.table-actions {
+  min-width: 190px;
+  align-items: center;
+}
+
+@media (max-width: 850px) {
+  .admin-page {
+    padding: 1rem;
+  }
+  .admin-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .header-actions {
+    width: 100%;
+  }
+  .header-actions .btn {
+    flex: 1;
+  }
+  .form-card,
+  .panel-card {
+    padding: 1rem;
+  }
+  fieldset {
+    padding: 0.9rem;
+  }
+}

@@ -1,0 +1,259 @@
+<!-- =====================================================
+     PORTADA DE GUAYAQUIL Y BUSCADOR
+===================================================== -->
+<section class="destination-hero">
+  <div class="destination-overlay">
+    <div class="destination-content">
+      <div class="destination-main">
+        <span class="country-label"> Ecuador </span>
+
+        <h1>Guayaquil</h1>
+
+        <p class="destination-description">
+          Descubre recorridos históricos, culturales, gastronómicos y naturales.
+        </p>
+
+        <div class="hero-search" role="search">
+          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+
+            <path d="m20 20-4-4"></path>
+          </svg>
+
+          <input
+            type="search"
+            placeholder="Buscar tours, lugares o categorías..."
+            aria-label="Buscar tours"
+            autocomplete="off"
+            [value]="textoBusqueda()"
+            (input)="actualizarTextoBusqueda($event)"
+            (keyup.enter)="buscar()"
+          />
+
+          <button
+            *ngIf="textoBusqueda()"
+            type="button"
+            class="btn-limpiar-busqueda"
+            aria-label="Limpiar búsqueda"
+            title="Limpiar búsqueda"
+            (click)="limpiarBusqueda()"
+          >
+            ×
+          </button>
+
+          <button type="button" class="btn-buscar" (click)="buscar()">Buscar</button>
+        </div>
+      </div>
+
+      <div class="destination-stats">
+        <article>
+          <strong>{{ totalTours() }}</strong>
+          <span>tours y actividades</span>
+        </article>
+
+        <article>
+          <strong>{{ totalCategorias() }}</strong>
+          <span>categorías disponibles</span>
+        </article>
+
+        <article>
+          <strong>{{ totalOpiniones() }}</strong>
+          <span>opiniones reales</span>
+        </article>
+
+        <article>
+          <strong>
+            {{ calificacionGlobalTexto() }}
+          </strong>
+          <span>puntuación promedio</span>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     CATEGORÍAS DE LA BASE DE DATOS
+===================================================== -->
+<section class="categories-section">
+  <div class="section-container">
+    <div class="categories-heading">
+      <div>
+        <span class="section-label"> Encuentra tu experiencia </span>
+
+        <h2>Explora por categoría</h2>
+
+        <p>Selecciona una categoría para filtrar los tours disponibles.</p>
+      </div>
+
+      <button
+        type="button"
+        class="btn-todas"
+        [class.active]="categoriaSeleccionada() === 'todas'"
+        (click)="seleccionarCategoria('todas')"
+      >
+        Todas las categorías
+      </button>
+    </div>
+
+    <div class="categories-grid">
+      <button
+        *ngFor="let categoria of categoriasDisponibles()"
+        type="button"
+        class="category-card"
+        [class.active]="categoriaSeleccionada() === categoria"
+        (click)="seleccionarCategoria(categoria)"
+      >
+        {{ categoria }}
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     TOURS
+===================================================== -->
+<section id="listadoTours" class="tours-section">
+  <div class="section-container">
+    <div class="section-heading">
+      <span class="section-label"> Experiencias disponibles </span>
+
+      <h2>Tours disponibles</h2>
+
+      <p>Elige la experiencia perfecta para tu próxima aventura.</p>
+
+      <div *ngIf="busqueda() || categoriaSeleccionada() !== 'todas'" class="filtros-activos">
+        <span *ngIf="busqueda()">
+          Búsqueda:
+          <strong>{{ busqueda() }}</strong>
+        </span>
+
+        <span *ngIf="categoriaSeleccionada() !== 'todas'">
+          Categoría:
+          <strong>
+            {{ categoriaSeleccionada() }}
+          </strong>
+        </span>
+
+        <button type="button" (click)="limpiarFiltros()">Limpiar filtros</button>
+      </div>
+    </div>
+
+    <div *ngIf="cargando()" class="estado-listado" aria-live="polite">
+      <span class="spinner"></span>
+      <p>Cargando tours...</p>
+    </div>
+
+    <div *ngIf="!cargando() && error()" class="estado-listado estado-error" role="alert">
+      {{ error() }}
+    </div>
+
+    <div *ngIf="!cargando() && !error() && toursFiltrados().length === 0" class="estado-listado">
+      <h3>No se encontraron tours</h3>
+
+      <p>Prueba con otro nombre o elimina los filtros aplicados.</p>
+
+      <button type="button" class="btn-mostrar-todos" (click)="limpiarFiltros()">
+        Mostrar todos los tours
+      </button>
+    </div>
+
+    <div *ngIf="!cargando() && !error() && toursFiltrados().length > 0" class="tours-grid">
+      <article *ngFor="let tour of toursFiltrados()" class="tour-card">
+        <div class="tour-image-wrapper">
+          <img
+            [src]="tour.image"
+            [alt]="tour.alt || tour.title"
+            class="tour-image"
+            loading="lazy"
+            (error)="imagenError($event)"
+          />
+
+          <button
+            type="button"
+            class="favorite-btn"
+            [class.active]="esFavorito(tour.id)"
+            [attr.aria-label]="
+              esFavorito(tour.id)
+                ? 'Quitar ' + tour.title + ' de favoritos'
+                : 'Agregar ' + tour.title + ' a favoritos'
+            "
+            [attr.title]="esFavorito(tour.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+            (click)="toggleFavorito(tour)"
+          >
+            <svg viewBox="0 0 24 24" class="favorite-icon" aria-hidden="true">
+              <path
+                d="M12 21s-6.716-4.35-9.193-8.143C.78 9.78 1.74 5.61 5.47 4.39c2.07-.68 4.04.08 5.2 1.84 1.16-1.76 3.13-2.52 5.2-1.84 3.73 1.22 4.69 5.39 2.663 8.467C18.716 16.65 12 21 12 21z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="tour-body">
+          <div class="tour-badges">
+            <span class="duration-badge">
+              {{ tour.badgeText }}
+            </span>
+
+            <span class="category-badge">
+              {{ tour.categoria }}
+            </span>
+          </div>
+
+          <h3>{{ tour.title }}</h3>
+
+          <p class="tour-description">
+            {{ tour.description }}
+          </p>
+
+          <div class="tour-info">
+            <strong>{{ tour.price }}</strong>
+
+            <span>
+              {{ tour.rating }}
+            </span>
+          </div>
+
+          <div class="tour-actions">
+            <a class="btn-details" [routerLink]="['/tour', tour.idTour || tour.id]">
+              Ver detalles
+            </a>
+
+            <button type="button" class="btn-reservar" (click)="reservar(tour)">
+              Reservar ahora
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     GALERÍA
+===================================================== -->
+<section class="gallery-section">
+  <div class="section-container">
+    <div class="section-heading">
+      <span class="section-label"> Conoce la ciudad </span>
+
+      <h2>Galería de Guayaquil</h2>
+
+      <p>Algunos de los lugares que podrás conocer durante los recorridos.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <img src="/tour_cerro_santa_ana.jpg" alt="Cerro Santa Ana" loading="lazy" />
+
+      <img src="/tour_malecon.jpg" alt="Malecón 2000" loading="lazy" />
+
+      <img src="/tour_parque_historico.jpg" alt="Parque Histórico" loading="lazy" />
+
+      <img src="/tuornaturaleza.jpg" alt="Tour de naturaleza" loading="lazy" />
+
+      <img src="/tour_gastronomico.jpg" alt="Tour gastronómico" loading="lazy" />
+
+      <img src="/guayaquilcompleto.jpg" alt="Vista panorámica de Guayaquil" loading="lazy" />
+    </div>
+  </div>
+</section>

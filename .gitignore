@@ -39,6 +39,15 @@ testem.log
 /typings
 __screenshots__/
 
+# Project-specific ignores
+/.env
+.env
+**/.env
+**/node_modules/
+**/.angular/
+**/dist/
+**/coverage/
+
 # System files
 .DS_Store
 Thumbs.db

@@ -1,0 +1,288 @@
+﻿<main class="user-dashboard">
+  <section class="dashboard-hero">
+    <div class="dashboard-container">
+      <div class="welcome-panel">
+        <div class="welcome-copy">
+          <span class="welcome-label">Panel personal</span>
+
+          <h1>
+            Bienvenido,
+            <span>{{ nombreUsuario }}</span>
+          </h1>
+
+          <p>
+            Revisa tus próximas reservas, consulta tu actividad y descubre nuevos recorridos en
+            Guayaquil.
+          </p>
+
+          <div class="welcome-actions">
+            <a routerLink="/tours" class="primary-link">
+              Explorar tours
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14"></path>
+                <path d="m14 7 5 5-5 5"></path>
+              </svg>
+            </a>
+
+            <a routerLink="/mis-reservas" class="secondary-link"> Ver mis reservas </a>
+          </div>
+        </div>
+
+        <div class="welcome-visual">
+          <div class="visual-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 19h16"></path>
+              <path d="M6 19V9l6-4 6 4v10"></path>
+              <path d="M9 19v-5h6v5"></path>
+              <path d="M8 10h.01M16 10h.01"></path>
+            </svg>
+          </div>
+
+          <strong>Tu experiencia SITG</strong>
+          <span>Todo lo importante en un solo lugar</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="summary-section">
+    <div class="dashboard-container">
+      <div class="summary-grid">
+        <article class="summary-card">
+          <div class="summary-icon blue">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+              <path d="M8 3v4M16 3v4M4 10h16"></path>
+              <path d="m9 15 2 2 4-4"></path>
+            </svg>
+          </div>
+
+          <div class="summary-content">
+            <span>Reservas confirmadas</span>
+
+            <strong>
+              {{ cargandoReservas() ? '...' : totalReservas() }}
+            </strong>
+
+            <small>Reservas activas en tu cuenta</small>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-icon red">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"
+              ></path>
+            </svg>
+          </div>
+
+          <div class="summary-content">
+            <span>Tours favoritos</span>
+            <strong>{{ totalFavoritos() }}</strong>
+            <small>Experiencias guardadas</small>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-icon green">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="m8 12 3 3 5-6"></path>
+            </svg>
+          </div>
+
+          <div class="summary-content">
+            <span>Tours completados</span>
+
+            <strong>
+              {{ cargandoReservas() ? '...' : toursCompletados() }}
+            </strong>
+
+            <small>Experiencias realizadas</small>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="reservations-section">
+    <div class="dashboard-container">
+      <header class="section-heading">
+        <div>
+          <span class="section-label">Tu agenda</span>
+          <h2>Próximas reservas</h2>
+          <p>Consulta los recorridos que tienes confirmados.</p>
+        </div>
+
+        <a routerLink="/mis-reservas" class="section-link">
+          Ver todas
+          <span>→</span>
+        </a>
+      </header>
+
+      <div *ngIf="cargandoReservas()" class="state-card" role="status">
+        <span class="loader"></span>
+        Cargando tus reservas...
+      </div>
+
+      <div
+        *ngIf="!cargandoReservas() && errorReservas()"
+        class="state-card error-state"
+        role="alert"
+      >
+        {{ errorReservas() }}
+      </div>
+
+      <div *ngIf="!cargandoReservas() && !errorReservas()" class="reservation-grid">
+        <article class="reservation-card" *ngFor="let reserva of proximasReservas()">
+          <div class="reservation-top">
+            <span class="reservation-type"> Reserva confirmada </span>
+
+            <span class="status-badge" [ngClass]="reserva.badgeClass || 'bg-success'">
+              {{ reserva.estado || 'Confirmada' }}
+            </span>
+          </div>
+
+          <h3>
+            {{ reserva.nombreTour || reserva.tour || 'Tour' }}
+          </h3>
+
+          <div class="reservation-details">
+            <div>
+              <span class="detail-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                  <path d="M8 3v4M16 3v4M4 10h16"></path>
+                </svg>
+              </span>
+
+              <div>
+                <small>Fecha</small>
+
+                <strong>
+                  {{ formatearFechaReserva(reserva) }}
+                </strong>
+              </div>
+            </div>
+
+            <div>
+              <span class="detail-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="9" cy="8" r="3"></circle>
+                  <path d="M4 20v-2a5 5 0 0 1 10 0v2"></path>
+                  <path d="M16 11a4 4 0 0 1 4 4v2"></path>
+                </svg>
+              </span>
+
+              <div>
+                <small>Personas</small>
+
+                <strong>
+                  {{ reserva.cantidadPersonas || reserva.personas || 0 }}
+                </strong>
+              </div>
+            </div>
+          </div>
+
+          <a routerLink="/mis-reservas" class="reservation-action">
+            Revisar reserva
+            <span>→</span>
+          </a>
+        </article>
+
+        <div *ngIf="proximasReservas().length === 0" class="empty-state" role="status">
+          <span class="empty-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+              <path d="M8 3v4M16 3v4M4 10h16"></path>
+            </svg>
+          </span>
+
+          <h3>No tienes próximas reservas</h3>
+
+          <p>Explora los tours disponibles y planifica tu siguiente experiencia.</p>
+
+          <a routerLink="/tours">Explorar tours</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="recommendations-section">
+    <div class="dashboard-container">
+      <header class="section-heading">
+        <div>
+          <span class="section-label">Descubre</span>
+          <h2>Recomendados para ti</h2>
+          <p>Algunas experiencias disponibles para tu próxima salida.</p>
+        </div>
+
+        <a routerLink="/tours" class="section-link">
+          Ver todos
+          <span>→</span>
+        </a>
+      </header>
+
+      <div *ngIf="cargandoTours()" class="state-card" role="status">
+        <span class="loader"></span>
+        Cargando recomendaciones...
+      </div>
+
+      <div *ngIf="!cargandoTours() && errorTours()" class="state-card error-state" role="alert">
+        {{ errorTours() }}
+      </div>
+
+      <div *ngIf="!cargandoTours() && !errorTours()" class="tour-grid">
+        <a
+          class="tour-card"
+          *ngFor="let tour of recomendaciones()"
+          [routerLink]="['/tour', obtenerIdTour(tour)]"
+          [attr.aria-label]="'Ver detalle de ' + obtenerTituloTour(tour)"
+        >
+          <div class="tour-image-wrap">
+            <img
+              [src]="obtenerImagenTour(tour)"
+              [alt]="obtenerTituloTour(tour)"
+              loading="lazy"
+              (error)="imagenError($event)"
+            />
+
+            <span class="duration">
+              {{ obtenerDuracionTour(tour) }}
+            </span>
+          </div>
+
+          <div class="tour-card-body">
+            <h3>{{ obtenerTituloTour(tour) }}</h3>
+
+            <p>
+              {{ obtenerDescripcionTour(tour) }}
+            </p>
+
+            <div class="tour-card-footer">
+              <div>
+                <small>Desde</small>
+
+                <strong>
+                  {{ obtenerPrecioTour(tour) | currency: 'USD' : 'symbol' : '1.2-2' }}
+                </strong>
+              </div>
+
+              <span class="detail-label">
+                Ver detalle
+                <b>→</b>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <div *ngIf="recomendaciones().length === 0" class="empty-state" role="status">
+          <h3>No hay tours disponibles</h3>
+          <p>Vuelve a intentarlo más tarde.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

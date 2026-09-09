@@ -1,0 +1,111 @@
+<div
+  class="app-container"
+  [class.sidebar-open]="auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'"
+  [class.navbar-visible]="
+    !auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'
+  "
+  [class.home-route]="router.url === '/home' || router.url === '/'"
+>
+  <ng-container *ngIf="!auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'">
+    <nav
+      class="public-navbar fixed-top"
+      [class.on-home]="router.url === '/home' || router.url === '/'"
+    >
+      <div class="navbar-shell">
+        <a class="navbar-brand" routerLink="/home">
+          <img src="/sigt.png" alt="SITG" class="logo" />
+
+          <span class="brand-copy">
+            <strong class="brand-title"> SITG </strong>
+
+            <small class="brand-subtitle"> Explora Guayaquil </small>
+          </span>
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarMenu"
+          aria-controls="navbarMenu"
+          aria-expanded="false"
+          aria-label="Abrir menú"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+          <ul class="navbar-nav nav-pill mx-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/home"
+                routerLinkActive="active-link"
+                [routerLinkActiveOptions]="{
+                  exact: true,
+                }"
+              >
+                Inicio
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/tours" routerLinkActive="active-link"> Tours </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/about" routerLinkActive="active-link"> Acerca de </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/contactanos" routerLinkActive="active-link">
+                Contacto
+              </a>
+            </li>
+          </ul>
+
+          <div class="navbar-actions">
+            <a
+              routerLink="/ayuda"
+              class="btn-help"
+              routerLinkActive="active"
+              aria-label="Ir al centro de ayuda"
+              title="Ayuda"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+
+                <path d="M9.7 9.2a2.6 2.6 0 1 1 4.2 2c-1 .8-1.9 1.4-1.9 2.7"></path>
+
+                <path d="M12 17h.01"></path>
+              </svg>
+            </a>
+
+            <a routerLink="/login" class="btn-login"> Ingresar </a>
+
+            <a routerLink="/registro" class="btn-register">
+              Registrarse
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </ng-container>
+
+  <ng-container *ngIf="auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'">
+    <app-navbar-admin *ngIf="auth.isAdmin()"></app-navbar-admin>
+
+    <app-sidebar *ngIf="!auth.isAdmin()"></app-sidebar>
+  </ng-container>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-fooster
+    *ngIf="!auth.isLoggedIn() && router.url !== '/login' && router.url !== '/registro'"
+  ></app-fooster>
+</div>

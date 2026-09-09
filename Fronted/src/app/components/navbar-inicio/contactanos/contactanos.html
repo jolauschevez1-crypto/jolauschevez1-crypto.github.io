@@ -1,0 +1,255 @@
+<main class="contact-page">
+  <section class="contact-hero">
+    <div class="contact-container hero-content">
+      <div>
+        <span class="hero-label"> Estamos para ayudarte </span>
+
+        <h1>Contáctanos</h1>
+
+        <p>Resuelve tus dudas sobre tours, reservas, pagos o cualquier servicio de SITG.</p>
+      </div>
+
+      <div class="hero-badge">
+        <span class="badge-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 5h16v11H7l-3 3V5Z"></path>
+
+            <path d="M8 9h8M8 12h5"></path>
+          </svg>
+        </span>
+
+        <div>
+          <strong>Atención personalizada</strong>
+          <span>Respondemos lo antes posible</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-main">
+    <div class="contact-container contact-grid">
+      <!-- INFORMACIÓN -->
+      <aside class="info-panel">
+        <div class="panel-heading">
+          <span class="section-label"> Información </span>
+
+          <h2>Hablemos de tu próxima experiencia</h2>
+
+          <p>Escríbenos o comunícate directamente mediante cualquiera de nuestros canales.</p>
+        </div>
+
+        <div class="contact-list">
+          <article class="contact-item">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z"></path>
+
+                <circle cx="12" cy="9" r="2.4"></circle>
+              </svg>
+            </span>
+
+            <div>
+              <small>Dirección</small>
+              <strong>Machala, Ecuador</strong>
+              <span>Atención presencial con cita previa</span>
+            </div>
+          </article>
+
+          <article class="contact-item">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M5 4h4l2 5-3 2a15 15 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2C10 21 3 14 3 6a2 2 0 0 1 2-2Z"
+                ></path>
+              </svg>
+            </span>
+
+            <div>
+              <small>Teléfono</small>
+              <a href="tel:+593993954238"> +593 99 395 4238 </a>
+              <span>Lunes a domingo, 08:00 a 18:00</span>
+            </div>
+          </article>
+
+          <article class="contact-item">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+
+                <path d="m4 7 8 6 8-6"></path>
+              </svg>
+            </span>
+
+            <div>
+              <small>Correo electrónico</small>
+              <a href="mailto:contacto@sitg.com"> contacto@sitg.com </a>
+              <span>Consultas, soporte y reservas</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="availability-card">
+          <div class="status-dot"></div>
+
+          <div>
+            <strong>Equipo disponible</strong>
+
+            <span> Normalmente respondemos en menos de 24 horas </span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- FORMULARIO -->
+      <section class="form-panel">
+        <div class="panel-heading">
+          <span class="section-label"> Escríbenos </span>
+
+          <h2>Envíanos un mensaje</h2>
+
+          <p>Completa el formulario y cuéntanos cómo podemos ayudarte.</p>
+        </div>
+
+        <form
+          #contactoForm="ngForm"
+          class="contact-form"
+          novalidate
+          (ngSubmit)="enviarMensaje(contactoForm)"
+        >
+          <div class="form-row">
+            <div class="field-group">
+              <label for="nombre"> Nombre completo </label>
+
+              <div
+                class="input-shell"
+                [class.invalid]="nombreControl.invalid && nombreControl.touched"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4"></circle>
+
+                  <path d="M5 21a7 7 0 0 1 14 0"></path>
+                </svg>
+
+                <input
+                  #nombreControl="ngModel"
+                  id="nombre"
+                  name="nombre"
+                  type="text"
+                  minlength="3"
+                  required
+                  placeholder="Escribe tu nombre"
+                  [(ngModel)]="nombre"
+                />
+              </div>
+
+              <small *ngIf="nombreControl.invalid && nombreControl.touched" class="field-error">
+                Ingresa un nombre válido.
+              </small>
+            </div>
+
+            <div class="field-group">
+              <label for="correo"> Correo electrónico </label>
+
+              <div
+                class="input-shell"
+                [class.invalid]="correoControl.invalid && correoControl.touched"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+
+                  <path d="m4 7 8 6 8-6"></path>
+                </svg>
+
+                <input
+                  #correoControl="ngModel"
+                  id="correo"
+                  name="correo"
+                  type="email"
+                  required
+                  email
+                  placeholder="correo@ejemplo.com"
+                  [(ngModel)]="correo"
+                />
+              </div>
+
+              <small *ngIf="correoControl.invalid && correoControl.touched" class="field-error">
+                Ingresa un correo válido.
+              </small>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="asunto"> Asunto </label>
+
+            <div
+              class="input-shell"
+              [class.invalid]="asuntoControl.invalid && asuntoControl.touched"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6h16M4 12h16M4 18h10"></path>
+              </svg>
+
+              <input
+                #asuntoControl="ngModel"
+                id="asunto"
+                name="asunto"
+                type="text"
+                minlength="4"
+                required
+                placeholder="Ej. Consulta sobre una reserva"
+                [(ngModel)]="asunto"
+              />
+            </div>
+
+            <small *ngIf="asuntoControl.invalid && asuntoControl.touched" class="field-error">
+              Escribe el asunto de tu consulta.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="mensaje"> Mensaje </label>
+
+            <div
+              class="textarea-shell"
+              [class.invalid]="mensajeControl.invalid && mensajeControl.touched"
+            >
+              <textarea
+                #mensajeControl="ngModel"
+                id="mensaje"
+                name="mensaje"
+                minlength="10"
+                required
+                rows="5"
+                placeholder="Describe tu consulta con todos los detalles necesarios..."
+                [(ngModel)]="mensaje"
+              ></textarea>
+
+              <span class="character-count"> {{ mensaje.length }}/500 </span>
+            </div>
+
+            <small *ngIf="mensajeControl.invalid && mensajeControl.touched" class="field-error">
+              El mensaje debe tener al menos 10 caracteres.
+            </small>
+          </div>
+
+          <div *ngIf="mensajeError()" class="form-message error-message">
+            {{ mensajeError() }}
+          </div>
+
+          <div *ngIf="mensajeExito()" class="form-message success-message">
+            {{ mensajeExito() }}
+          </div>
+
+          <button type="submit" class="submit-button" [disabled]="enviando()">
+            <span>
+              {{ enviando() ? 'Enviando...' : 'Enviar mensaje' }}
+            </span>
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m5 12 14-7-5 14-2-5-7-2Z"></path>
+            </svg>
+          </button>
+        </form>
+      </section>
+    </div>
+  </section>
+</main>

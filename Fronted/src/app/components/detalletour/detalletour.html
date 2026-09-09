@@ -1,0 +1,460 @@
+<section *ngIf="cargando()" class="detalle-estado">
+  <span class="spinner"></span>
+  <p>Cargando información del tour...</p>
+</section>
+
+<section *ngIf="!cargando() && error()" class="detalle-estado">
+  <div class="estado-error">
+    <h2>No se pudo mostrar el tour</h2>
+    <p>{{ error() }}</p>
+    <button type="button" (click)="volver()">Volver a tours</button>
+  </div>
+</section>
+
+<main *ngIf="!cargando() && !error() && tour() as tourActual" class="detalle-page">
+  <div class="detalle-volver contenedor-detalle">
+    <button
+      type="button"
+      class="boton-volver"
+      (click)="volver()"
+      aria-label="Regresar a la lista de tours"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M19 12H5"></path>
+        <path d="m11 18-6-6 6-6"></path>
+      </svg>
+
+      <span>Regresar a tours</span>
+    </button>
+  </div>
+
+  <section class="detalle-cabecera contenedor-detalle">
+    <div>
+      <p class="miga">
+        Ecuador · Guayaquil ·
+        {{ tourActual.categoria }}
+      </p>
+
+      <h1>{{ tourActual.title }}</h1>
+
+      <div class="cabecera-meta">
+        <strong>
+          {{ promedioOpiniones() || tourActual.calificacionPromedio | number: '1.1-1' }}
+          / 5
+        </strong>
+
+        <span>
+          {{ totalOpiniones() || tourActual.totalComentarios }}
+          opiniones
+        </span>
+
+        <span class="cancelacion-gratis"> Cancelación gratuita </span>
+
+        <span> Bono {{ tourActual.tipoBono }} </span>
+      </div>
+    </div>
+
+    <div class="cabecera-precio">
+      <span>Desde</span>
+      <strong>
+        {{ tourActual.precio | currency: 'USD' : 'symbol' : '1.2-2' }}
+      </strong>
+      <button type="button" (click)="reservar()">Ver disponibilidad</button>
+    </div>
+  </section>
+
+  <section
+    class="galeria contenedor-detalle"
+    [class.solo-principal]="obtenerGaleria(tourActual).length === 0"
+  >
+    <div class="imagen-principal">
+      <img
+        [src]="obtenerImagenPrincipal(tourActual)"
+        [alt]="tourActual.title"
+        (error)="imagenError($event)"
+      />
+    </div>
+
+    <div
+      *ngIf="obtenerGaleria(tourActual) as imagenesGaleria"
+      class="imagenes-secundarias"
+      [class.una-imagen]="imagenesGaleria.length === 1"
+      [class.dos-imagenes]="imagenesGaleria.length === 2"
+      [class.tres-imagenes]="imagenesGaleria.length === 3"
+      [class.cuatro-imagenes]="imagenesGaleria.length >= 4"
+    >
+      <img
+        *ngFor="let imagen of imagenesGaleria; let indice = index"
+        [src]="imagen"
+        [alt]="tourActual.title + ' - Imagen ' + (indice + 2)"
+        (error)="imagenError($event)"
+      />
+    </div>
+  </section>
+
+  <nav class="tabs contenedor-detalle">
+    <button
+      type="button"
+      [class.active]="tabActiva() === 'descripcion'"
+      (click)="cambiarTab('descripcion')"
+    >
+      Descripción
+    </button>
+
+    <button
+      type="button"
+      [class.active]="tabActiva() === 'detalles'"
+      (click)="cambiarTab('detalles')"
+    >
+      Detalles
+    </button>
+
+    <button
+      type="button"
+      [class.active]="tabActiva() === 'opiniones'"
+      (click)="cambiarTab('opiniones')"
+    >
+      Opiniones
+    </button>
+  </nav>
+
+  <section class="detalle-layout contenedor-detalle">
+    <div class="detalle-contenido">
+      <article *ngIf="tabActiva() === 'descripcion'" class="panel-seccion">
+        <h2>Descripción</h2>
+
+        <p class="descripcion-principal">
+          {{ tourActual.descripcion }}
+        </p>
+
+        <div class="aviso-tour">
+          <div class="aviso-icono">i</div>
+          <div>
+            <h3>Antes de comenzar</h3>
+            <p>
+              {{
+                tourActual.indicaciones ||
+                  'Lleva ropa cómoda y llega con anticipación al punto de encuentro.'
+              }}
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article *ngIf="tabActiva() === 'detalles'" class="panel-seccion">
+        <h2>Detalles</h2>
+
+        <div class="filas-detalle">
+          <div class="fila-detalle">
+            <span class="detalle-icono">DU</span>
+            <strong>Duración</strong>
+            <p>{{ tourActual.duracionHoras }} horas.</p>
+          </div>
+
+          <div class="fila-detalle">
+            <span class="detalle-icono">ID</span>
+            <strong>Idioma</strong>
+            <p>
+              La actividad se realiza en
+              {{ tourActual.idioma }}.
+            </p>
+          </div>
+
+          <div class="fila-detalle">
+            <span class="detalle-icono">IN</span>
+            <strong>Incluido</strong>
+            <ul>
+              <li *ngFor="let elemento of listaIncluido(tourActual)">
+                {{ elemento }}
+              </li>
+            </ul>
+          </div>
+
+          <div class="fila-detalle">
+            <span class="detalle-icono">NO</span>
+            <strong>No incluido</strong>
+            <ul>
+              <li *ngFor="let elemento of listaNoIncluido(tourActual)">
+                {{ elemento }}
+              </li>
+            </ul>
+          </div>
+
+          <div class="fila-detalle">
+            <span class="detalle-icono">CR</span>
+            <strong>Cuándo reservar</strong>
+            <p>
+              Puedes reservar hasta
+              {{ tourActual.horasAnticipacion }} horas antes, siempre que queden cupos.
+            </p>
+          </div>
+
+          <div class="fila-detalle">
+            <span class="detalle-icono">BO</span>
+            <strong>Tipo de bono</strong>
+            <p>{{ tourActual.tipoBono }}.</p>
+          </div>
+
+          <div class="fila-detalle">
+            <span class="detalle-icono">AC</span>
+            <strong>Accesibilidad</strong>
+            <p>{{ tourActual.accesibilidad }}.</p>
+          </div>
+
+          <div class="fila-detalle">
+            <span class="detalle-icono">SO</span>
+            <strong>Sostenibilidad</strong>
+            <p>{{ tourActual.sostenibilidad }}.</p>
+          </div>
+
+          <div class="fila-detalle">
+            <span class="detalle-icono">PE</span>
+            <strong>Punto de encuentro</strong>
+            <p>{{ tourActual.puntoEncuentro || 'Se confirmará al reservar' }}.</p>
+          </div>
+        </div>
+      </article>
+
+      <article *ngIf="tabActiva() === 'opiniones'" class="panel-seccion opiniones-seccion">
+        <div class="opiniones-cabecera">
+          <div>
+            <h2>Opiniones de nuestros clientes</h2>
+            <p>Comentarios de usuarios que tienen una reserva confirmada para este tour.</p>
+          </div>
+
+          <button type="button" class="btn-comentar" (click)="alternarFormularioOpinion()">
+            Escribir comentario
+          </button>
+        </div>
+
+        <div class="resumen-opiniones">
+          <strong> {{ promedioOpiniones() | number: '1.1-1' }} / 5 </strong>
+          <span>{{ totalOpiniones() }} opiniones</span>
+        </div>
+
+        <div *ngIf="mensajeOpinion()" class="mensaje exito">
+          {{ mensajeOpinion() }}
+        </div>
+
+        <div *ngIf="errorOpinion()" class="mensaje error">
+          {{ errorOpinion() }}
+        </div>
+
+        <form *ngIf="mostrarFormularioOpinion()" class="form-opinion" (ngSubmit)="guardarOpinion()">
+          <h3>Comparte tu experiencia</h3>
+
+          <label>Puntuación</label>
+          <div class="selector-estrellas">
+            <button
+              *ngFor="let valor of [1, 2, 3, 4, 5]"
+              type="button"
+              [class.active]="valor <= formularioOpinion.puntuacion"
+              (click)="seleccionarPuntuacion(valor)"
+            >
+              ★
+            </button>
+          </div>
+
+          <div class="form-grid">
+            <div>
+              <label for="ciudadOpinion">Ciudad y país</label>
+              <input
+                id="ciudadOpinion"
+                name="ciudadOpinion"
+                type="text"
+                [(ngModel)]="formularioOpinion.ciudad"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="tipoViajeOpinion"> Tipo de viaje </label>
+              <select
+                id="tipoViajeOpinion"
+                name="tipoViajeOpinion"
+                [(ngModel)]="formularioOpinion.tipoViaje"
+              >
+                <option value="Solo">Solo</option>
+                <option value="En pareja">En pareja</option>
+                <option value="En familia">En familia</option>
+                <option value="Con amigos">Con amigos</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="comentarioOpinion">Comentario</label>
+          <textarea
+            id="comentarioOpinion"
+            name="comentarioOpinion"
+            rows="5"
+            maxlength="1000"
+            [(ngModel)]="formularioOpinion.comentario"
+            placeholder="Cuéntanos cómo fue tu experiencia..."
+            required
+          ></textarea>
+
+          <div class="form-opinion-acciones">
+            <button type="button" class="btn-secundario" (click)="alternarFormularioOpinion()">
+              Cancelar
+            </button>
+
+            <button type="submit" class="btn-publicar" [disabled]="guardandoOpinion()">
+              {{ guardandoOpinion() ? 'Publicando...' : 'Publicar comentario' }}
+            </button>
+          </div>
+        </form>
+
+        <div *ngIf="cargandoOpiniones()" class="cargando-opiniones">Cargando opiniones...</div>
+
+        <div *ngIf="!cargandoOpiniones() && opiniones().length === 0" class="sin-opiniones">
+          Este tour todavía no tiene opiniones.
+        </div>
+
+        <div class="lista-opiniones">
+          <article *ngFor="let opinion of opiniones()" class="opinion-card">
+            <div class="opinion-superior">
+              <div>
+                <div class="estrellas-lectura">
+                  <span
+                    *ngFor="let activa of estrellas(opinion.puntuacion)"
+                    [class.active]="activa"
+                  >
+                    ★
+                  </span>
+                </div>
+
+                <time>
+                  {{ opinion.fechaCreacion | date: 'dd/MM/yyyy' }}
+                </time>
+              </div>
+
+              <div class="opinion-autor">
+                <strong>{{ opinion.nombreUsuario }}</strong>
+                <span>{{ opinion.ciudad }}</span>
+              </div>
+            </div>
+
+            <p>{{ opinion.comentario }}</p>
+
+            <footer>{{ opinion.tipoViaje }}</footer>
+          </article>
+        </div>
+      </article>
+    </div>
+
+    <aside class="reserva-lateral">
+      <div class="reserva-panel">
+        <div class="precio-lateral">
+          <span>Precio por adulto</span>
+          <strong>
+            {{ precioAdulto() | currency: 'USD' : 'symbol' : '1.2-2' }}
+          </strong>
+        </div>
+
+        <label for="fechaTourReserva">Fecha</label>
+        <input
+          id="fechaTourReserva"
+          type="date"
+          [min]="minDate"
+          [ngModel]="fecha()"
+          (ngModelChange)="actualizarFecha($event)"
+        />
+
+        <label>Personas</label>
+        <button type="button" class="selector-personas-boton" (click)="abrirSelectorPersonas()">
+          <span>{{ resumenPersonas() }}</span>
+          <strong>Cambiar</strong>
+        </button>
+
+        <div class="total-lateral">
+          <span>Total estimado</span>
+          <strong>
+            {{ total() | currency: 'USD' : 'symbol' : '1.2-2' }}
+          </strong>
+        </div>
+
+        <button
+          type="button"
+          class="btn-reservar"
+          [disabled]="cuposDisponibles() <= 0"
+          (click)="reservar()"
+        >
+          {{ cuposDisponibles() > 0 ? 'Reservar' : 'Sin cupos' }}
+        </button>
+
+        <p class="cupo-texto">{{ cuposDisponibles() }} cupos disponibles</p>
+      </div>
+    </aside>
+  </section>
+
+  <div *ngIf="selectorPersonasAbierto()" class="modal-fondo" (click)="cerrarSelectorPersonas()">
+    <section class="modal-personas" (click)="$event.stopPropagation()">
+      <header>
+        <div>
+          <span>Selecciona los viajeros</span>
+          <h2>Personas</h2>
+        </div>
+        <button type="button" class="cerrar-modal" (click)="cerrarSelectorPersonas()">×</button>
+      </header>
+
+      <div class="fila-persona">
+        <div>
+          <strong>Adultos</strong>
+          <span>
+            {{ precioAdulto() | currency: 'USD' : 'symbol' : '1.2-2' }}
+            por persona
+          </span>
+        </div>
+
+        <div class="contador">
+          <button type="button" [disabled]="adultosTemporales() <= 1" (click)="cambiarAdultos(-1)">
+            −
+          </button>
+          <strong>{{ adultosTemporales() }}</strong>
+          <button
+            type="button"
+            [disabled]="adultosTemporales() + menoresTemporales() >= cuposDisponibles()"
+            (click)="cambiarAdultos(1)"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
+      <div class="fila-persona">
+        <div>
+          <strong> Menores de {{ tourActual.edadGratis }} años </strong>
+          <span>{{ precioMenorTexto() }}</span>
+        </div>
+
+        <div class="contador">
+          <button type="button" [disabled]="menoresTemporales() <= 0" (click)="cambiarMenores(-1)">
+            −
+          </button>
+          <strong>{{ menoresTemporales() }}</strong>
+          <button
+            type="button"
+            [disabled]="adultosTemporales() + menoresTemporales() >= cuposDisponibles()"
+            (click)="cambiarMenores(1)"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-total">
+        <span>Total</span>
+        <strong>
+          {{ totalTemporal() | currency: 'USD' : 'symbol' : '1.2-2' }}
+        </strong>
+      </div>
+
+      <footer>
+        <button type="button" class="btn-cancelar-modal" (click)="cerrarSelectorPersonas()">
+          Cancelar
+        </button>
+        <button type="button" class="btn-aceptar-modal" (click)="aceptarPersonas()">Aceptar</button>
+      </footer>
+    </section>
+  </div>
+</main>

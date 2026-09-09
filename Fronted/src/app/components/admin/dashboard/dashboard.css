@@ -1,0 +1,755 @@
+:host {
+  --primary: #0d6efd;
+  --primary-dark: #0757ca;
+  --primary-soft: #edf5ff;
+  --background: #f4f7fb;
+  --surface: #ffffff;
+  --text: #172033;
+  --muted: #667085;
+  --border: #e1e8f0;
+  --success: #168653;
+  --warning: #dc8b12;
+  --shadow: 0 10px 28px rgba(15, 23, 42, 0.07);
+
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background: var(--background);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   PÁGINA
+===================================================== */
+
+.admin-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: clamp(24px, 3vw, 42px);
+
+  background:
+    radial-gradient(circle at 96% 2%, rgba(13, 110, 253, 0.08), transparent 25%), var(--background);
+}
+
+/* =====================================================
+   ENCABEZADO
+===================================================== */
+
+.admin-heading {
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.admin-heading h1 {
+  margin: 0;
+  color: #202734;
+  font-size: clamp(2.3rem, 4vw, 3.7rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.admin-heading p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.admin-heading .btn,
+.admin-heading button {
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 12px;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--primary), #3c8bff);
+  box-shadow: 0 12px 26px rgba(13, 110, 253, 0.25);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-heading .btn:hover,
+.admin-heading button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(13, 110, 253, 0.32);
+}
+
+/* =====================================================
+   TARJETAS DE RESUMEN
+===================================================== */
+
+.stats-grid {
+  width: 100%;
+  margin-bottom: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.stat-card {
+  position: relative;
+  min-height: 132px;
+  padding: 24px 25px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.15), rgba(13, 110, 253, 0.04));
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--primary), #66a3ff);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: #bed5fb;
+  box-shadow: 0 17px 38px rgba(15, 23, 42, 0.11);
+}
+
+.stat-card strong {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-bottom: 9px;
+  color: var(--primary);
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.stat-card span {
+  position: relative;
+  z-index: 1;
+  color: #344054;
+  font-size: 0.91rem;
+  font-weight: 650;
+}
+
+/* Variación discreta de tarjetas */
+
+.stat-card:nth-child(4)::after {
+  background: linear-gradient(180deg, #ef9b21, #ffc66f);
+}
+
+.stat-card:nth-child(4) strong {
+  color: #ce7c08;
+}
+
+.stat-card:nth-child(5)::after {
+  background: linear-gradient(180deg, #7d5ce8, #aa91ff);
+}
+
+.stat-card:nth-child(5) strong {
+  color: #6846d5;
+}
+
+.stat-card:nth-child(6)::after {
+  background: linear-gradient(180deg, #168653, #57c990);
+}
+
+.stat-card:nth-child(6) strong {
+  color: var(--success);
+}
+
+/* =====================================================
+   PANEL DE ÚLTIMAS RESERVAS
+===================================================== */
+
+.panel-card {
+  width: 100%;
+  padding: 27px 29px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.panel-card h2 {
+  position: relative;
+  margin: 0 0 22px;
+  padding-left: 15px;
+  color: #202734;
+  font-size: 1.45rem;
+  font-weight: 850;
+}
+
+.panel-card h2::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  width: 5px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e7edf4;
+  border-radius: 14px;
+}
+
+.panel-card table {
+  width: 100%;
+  min-width: 780px;
+  margin: 0;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.panel-card thead {
+  background: #f5f8fc;
+}
+
+.panel-card th {
+  padding: 16px 14px;
+  color: #344054;
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.panel-card td {
+  padding: 16px 14px;
+  border-top: 1px solid #e7edf4;
+  color: #344054;
+  font-size: 0.87rem;
+  vertical-align: middle;
+}
+
+.panel-card tbody tr {
+  transition: background 0.18s ease;
+}
+
+.panel-card tbody tr:hover {
+  background: #f8fbff;
+}
+
+.panel-card tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* =====================================================
+   ESTADOS Y ALERTAS
+===================================================== */
+
+.alert {
+  padding: 15px 17px;
+  border-radius: 13px;
+  font-size: 0.9rem;
+}
+
+.alert-danger {
+  border: 1px solid #ffc8ce;
+  color: #a92735;
+  background: #fff2f3;
+}
+
+.alert-info {
+  border: 1px solid #bdd8ff;
+  color: #0757ca;
+  background: #eff6ff;
+}
+
+/* =====================================================
+   ADAPTACIÓN
+===================================================== */
+
+@media (max-width: 1100px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-page {
+    padding: 19px;
+  }
+
+  .admin-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-heading h1 {
+    font-size: 2.5rem;
+  }
+
+  .admin-heading .btn,
+  .admin-heading button {
+    width: 100%;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    min-height: 118px;
+  }
+
+  .panel-card {
+    padding: 21px 17px;
+    border-radius: 17px;
+  }
+}
+/* Ajuste final del Dashboard */
+
+.admin-heading h1 {
+  font-size: clamp(2.2rem, 3.2vw, 3.2rem);
+}
+
+/* Elimina los cuadros vacíos */
+.stat-card::before {
+  display: none;
+}
+
+/* Tarjetas más compactas */
+.stat-card {
+  min-height: 132px;
+  padding: 24px 26px;
+}
+
+/* Mejor alineación del contenido */
+.stat-card strong {
+  margin-bottom: 10px;
+}
+
+.stat-card span {
+  font-size: 0.9rem;
+}
+
+/* Reduce un poco el espacio superior */
+.admin-page {
+  padding-top: 34px;
+}
+
+/* Panel de reservas */
+.panel-card {
+  margin-top: 4px;
+}
+
+.panel-card h2 {
+  font-size: 1.35rem;
+}
+
+/* Tabla un poco más compacta */
+.panel-card th {
+  padding: 14px 16px;
+}
+
+.panel-card td {
+  padding: 15px 16px;
+}
+/* =====================================================
+   GRILLA DE PANELES NUEVOS (actividad, próximos tours,
+   clientes frecuentes, tours con bajo rendimiento)
+===================================================== */
+
+.panels-grid {
+  width: 100%;
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.panels-grid .panel-card {
+  margin-top: 0;
+}
+
+@media (max-width: 1100px) {
+  .panels-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* =====================================================
+   GRILLA DE PANELES NUEVOS
+===================================================== */
+
+.panels-grid {
+  width: 100%;
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.panels-grid .panel-card {
+  margin-top: 0;
+}
+
+.panels-grid .panel-card h2 {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1100px) {
+  .panels-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =====================================================
+   BADGES DE ESTADO (pastillas de color)
+===================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 11px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.badge-success {
+  color: #0f7a45;
+  background: #e6f7ee;
+}
+.badge-danger {
+  color: #b3202f;
+  background: #fdeaec;
+}
+.badge-warning {
+  color: #b06908;
+  background: #fdf1de;
+}
+.badge-purple {
+  color: #5c3fc4;
+  background: #efeaff;
+}
+.badge-neutral {
+  color: #52607a;
+  background: #eef1f6;
+}
+
+/* =====================================================
+   TIMELINE (actividad reciente)
+===================================================== */
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  padding: 0 4px 20px 4px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 14px;
+  bottom: -6px;
+  width: 2px;
+  background: #e7edf4;
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 2px;
+}
+
+.timeline-dot {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  margin-top: 4px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 3px #ffffff;
+  z-index: 1;
+}
+
+.timeline-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeline-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.timeline-label {
+  color: #202734;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.timeline-time {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.timeline-states {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 6px;
+}
+
+.timeline-arrow {
+  color: #a7b0c0;
+  font-size: 0.8rem;
+}
+
+/* =====================================================
+   RANKING (clientes frecuentes)
+===================================================== */
+
+.rank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 4px;
+  border-bottom: 1px solid #f0f3f8;
+}
+
+.rank-item:last-child {
+  border-bottom: 0;
+}
+
+.rank-number {
+  flex: 0 0 auto;
+  width: 22px;
+  color: #a7b0c0;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.rank-gold {
+  color: #c9971a;
+}
+.rank-silver {
+  color: #8a94a6;
+}
+.rank-bronze {
+  color: #b06a34;
+}
+
+.rank-avatar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.rank-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rank-name {
+  display: block;
+  margin-bottom: 6px;
+  overflow: hidden;
+  color: #202734;
+  font-size: 0.87rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rank-bar-track {
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: #eef1f6;
+  overflow: hidden;
+}
+
+.rank-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), #66a3ff);
+}
+
+.rank-meta {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rank-meta strong {
+  color: #202734;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.rank-meta span {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+/* =====================================================
+   LISTA SIMPLE (próximos tours / bajo rendimiento)
+===================================================== */
+
+.simple-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.simple-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 4px;
+  border-bottom: 1px solid #f0f3f8;
+}
+
+.simple-list-item:last-child {
+  border-bottom: 0;
+}
+
+.simple-list-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.simple-list-title {
+  overflow: hidden;
+  color: #202734;
+  font-size: 0.87rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.simple-list-sub {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.count-badge {
+  flex: 0 0 auto;
+  padding: 4px 11px;
+  border-radius: 999px;
+  color: #52607a;
+  background: #eef1f6;
+  font-size: 0.76rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.count-badge-zero {
+  color: #b3202f;
+  background: #fdeaec;
+}
+
+.count-badge-info {
+  color: #0757ca;
+  background: #eff6ff;
+}
+
+/* =====================================================
+   ESTADOS VACÍOS
+===================================================== */
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  padding: 34px 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty-icon {
+  width: 34px;
+  height: 34px;
+  color: #c3cbdb;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}

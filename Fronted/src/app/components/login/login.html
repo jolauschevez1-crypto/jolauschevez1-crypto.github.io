@@ -1,0 +1,169 @@
+<main class="auth-screen auth-login">
+  <div class="auth-overlay"></div>
+
+  <a routerLink="/home" class="home-link" aria-label="Volver al inicio">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m15 18-6-6 6-6"></path>
+    </svg>
+    <span>Volver al inicio</span>
+  </a>
+
+  <section class="auth-shell">
+    <div class="welcome-panel">
+      <div class="brand-row">
+        <img src="/sigt.png" alt="SITG" class="brand-logo" />
+
+        <div>
+          <strong>SITG</strong>
+          <span>Explora Guayaquil</span>
+        </div>
+      </div>
+
+      <div class="welcome-copy">
+        <span class="eyebrow"> Tu próxima experiencia comienza aquí </span>
+
+        <h1>
+          Bienvenido
+          <span>de nuevo</span>
+        </h1>
+
+        <p>
+          Inicia sesión para gestionar tus reservas, revisar pagos y guardar tus tours favoritos.
+        </p>
+
+        <div class="welcome-features">
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m5 12 4 4L19 6"></path>
+            </svg>
+            Reservas seguras
+          </span>
+
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m5 12 4 4L19 6"></path>
+            </svg>
+            Experiencias en Guayaquil
+          </span>
+        </div>
+      </div>
+
+      <p class="welcome-footer">Turismo local, sencillo y confiable</p>
+    </div>
+
+    <div class="form-panel">
+      <div class="form-card">
+        <header class="form-header">
+          <span class="form-kicker"> Acceso de usuario </span>
+
+          <h2>Iniciar sesión</h2>
+
+          <p>Ingresa tus datos para continuar</p>
+        </header>
+
+        <div *ngIf="error()" class="auth-alert" role="alert">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 7v6"></path>
+            <path d="M12 17h.01"></path>
+          </svg>
+          <span>{{ error() }}</span>
+        </div>
+
+        <form class="auth-form" (submit)="submit(email, password); $event.preventDefault()">
+          <div class="field-group">
+            <label for="loginEmail"> Correo electrónico </label>
+
+            <div class="input-shell">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <path d="m4 7 8 6 8-6"></path>
+              </svg>
+
+              <input
+                #email
+                id="loginEmail"
+                type="email"
+                placeholder="ejemplo@correo.com"
+                autocomplete="email"
+                [disabled]="cargando()"
+              />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="loginPassword"> Contraseña </label>
+
+            <div class="input-shell password-shell">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+              </svg>
+
+              <input
+                #password
+                id="loginPassword"
+                [type]="showPassword ? 'text' : 'password'"
+                placeholder="Ingresa tu contraseña"
+                autocomplete="current-password"
+                [disabled]="cargando()"
+              />
+
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="showPassword = !showPassword"
+                [disabled]="cargando()"
+                [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              >
+                <svg *ngIf="!showPassword" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
+                  <circle cx="12" cy="12" r="2.5"></circle>
+                </svg>
+
+                <svg *ngIf="showPassword" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m3 3 18 18"></path>
+                  <path
+                    d="M10.5 6.2A10.8 10.8 0 0 1 12 6c6 0 9.5 6 9.5 6a15.7 15.7 0 0 1-2.1 2.8"
+                  ></path>
+                  <path d="M6.2 6.2C3.8 8 2.5 12 2.5 12s3.5 6 9.5 6a10.8 10.8 0 0 0 3.3-.5"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-option">
+              <input type="checkbox" checked />
+              <span>Mantener sesión iniciada</span>
+            </label>
+
+            <a routerLink="/recuperar-contrasena"> ¿Olvidaste tu contraseña? </a>
+          </div>
+
+          <button type="submit" class="submit-button" [disabled]="cargando()">
+            <span>
+              {{ cargando() ? 'Ingresando...' : 'Iniciar sesión' }}
+            </span>
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14"></path>
+              <path d="m14 7 5 5-5 5"></path>
+            </svg>
+          </button>
+        </form>
+
+        <div class="auth-divider">
+          <span></span>
+          <small>o</small>
+          <span></span>
+        </div>
+
+        <footer class="form-footer">
+          <span>¿Todavía no tienes cuenta?</span>
+          <a routerLink="/registro"> Crear una cuenta </a>
+        </footer>
+      </div>
+    </div>
+  </section>
+</main>

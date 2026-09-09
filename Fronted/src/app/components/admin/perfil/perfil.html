@@ -1,0 +1,319 @@
+<section class="profile-page">
+  <!-- ENCABEZADO -->
+  <header class="profile-heading">
+    <div>
+      <span class="page-tag"> Cuenta administrativa </span>
+
+      <h1>Mi perfil</h1>
+
+      <p>Administra tus datos personales y la seguridad de tu cuenta.</p>
+    </div>
+
+    <button type="button" class="reload-button" [disabled]="cargando()" (click)="cargar()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 11a8 8 0 1 0-2.3 5.7"></path>
+
+        <path d="M20 4v7h-7"></path>
+      </svg>
+
+      Actualizar
+    </button>
+  </header>
+
+  <!-- MENSAJES -->
+  <div *ngIf="error()" class="profile-alert alert-error" role="alert">
+    <span class="alert-icon"> ! </span>
+
+    <div>
+      <strong>Ocurrió un problema</strong>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="mensaje()" class="profile-alert alert-success" role="status">
+    <span class="alert-icon"> ✓ </span>
+
+    <div>
+      <strong>Operación completada</strong>
+      <p>{{ mensaje() }}</p>
+    </div>
+  </div>
+
+  <!-- CARGANDO -->
+  <div *ngIf="cargando()" class="loading-card" role="status">
+    <span class="loader"></span>
+
+    <div>
+      <strong>Cargando perfil</strong>
+      <p>Obteniendo información del administrador...</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!cargando()">
+    <!-- PRESENTACIÓN DEL ADMINISTRADOR -->
+    <article class="profile-summary">
+      <div class="profile-avatar">
+        {{ inicial() }}
+      </div>
+
+      <div class="profile-identity">
+        <span class="role-badge"> Administrador </span>
+
+        <h2>
+          {{ nombre() || 'Administrador SITG' }}
+        </h2>
+
+        <p>
+          {{ correo() || 'Correo no registrado' }}
+        </p>
+      </div>
+
+      <div class="account-status">
+        <span class="status-dot"></span>
+
+        <div>
+          <small>Estado de la cuenta</small>
+          <strong>Activa</strong>
+        </div>
+      </div>
+    </article>
+
+    <div class="profile-grid">
+      <!-- DATOS PERSONALES -->
+      <form class="profile-card" (ngSubmit)="guardarPerfil()">
+        <header class="card-heading">
+          <span class="card-icon personal-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"></circle>
+
+              <path d="M5 21a7 7 0 0 1 14 0"></path>
+            </svg>
+          </span>
+
+          <div>
+            <span class="card-tag"> Información </span>
+
+            <h2>Datos personales</h2>
+
+            <p>Actualiza el nombre y el correo de la cuenta.</p>
+          </div>
+        </header>
+
+        <div class="field-group">
+          <label for="nombreAdmin"> Nombre completo </label>
+
+          <div class="input-container">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+
+                <path d="M5 21a7 7 0 0 1 14 0"></path>
+              </svg>
+            </span>
+
+            <input
+              id="nombreAdmin"
+              class="form-control"
+              type="text"
+              name="nombre"
+              autocomplete="name"
+              placeholder="Nombre del administrador"
+              [ngModel]="nombre()"
+              (ngModelChange)="nombre.set($event)"
+              [disabled]="guardando()"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="correoAdmin"> Correo electrónico </label>
+
+          <div class="input-container">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+
+                <path d="m4 7 8 6 8-6"></path>
+              </svg>
+            </span>
+
+            <input
+              id="correoAdmin"
+              class="form-control"
+              type="email"
+              name="correo"
+              autocomplete="email"
+              placeholder="correo@ejemplo.com"
+              [ngModel]="correo()"
+              (ngModelChange)="correo.set($event)"
+              [disabled]="guardando()"
+              required
+            />
+          </div>
+        </div>
+
+        <footer class="card-actions">
+          <button class="primary-button" type="submit" [disabled]="guardando()">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 4h12l2 2v14H5V4Z"></path>
+
+              <path d="M8 4v6h8V4"></path>
+
+              <path d="M8 20v-6h8v6"></path>
+            </svg>
+
+            {{ guardando() ? 'Guardando...' : 'Guardar cambios' }}
+          </button>
+        </footer>
+      </form>
+
+      <!-- SEGURIDAD -->
+      <form class="profile-card" (ngSubmit)="cambiarPassword()">
+        <header class="card-heading">
+          <span class="card-icon security-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="5" y="10" width="14" height="11" rx="2"></rect>
+
+              <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+
+              <circle cx="12" cy="15" r="1"></circle>
+            </svg>
+          </span>
+
+          <div>
+            <span class="card-tag"> Seguridad </span>
+
+            <h2>Cambiar contraseña</h2>
+
+            <p>Utiliza una contraseña diferente a la actual.</p>
+          </div>
+        </header>
+
+        <div class="field-group">
+          <label for="passwordActual"> Contraseña actual </label>
+
+          <div class="input-container password-container">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="5" y="10" width="14" height="11" rx="2"></rect>
+
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+              </svg>
+            </span>
+
+            <input
+              id="passwordActual"
+              class="form-control"
+              [type]="mostrarActual() ? 'text' : 'password'"
+              name="passwordActual"
+              autocomplete="current-password"
+              placeholder="Ingresa tu contraseña actual"
+              [ngModel]="passwordActual()"
+              (ngModelChange)="passwordActual.set($event)"
+              [disabled]="cambiandoPassword()"
+              required
+            />
+
+            <button
+              type="button"
+              class="visibility-button"
+              [attr.aria-label]="mostrarActual() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              (click)="alternarPasswordActual()"
+            >
+              {{ mostrarActual() ? 'Ocultar' : 'Ver' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="passwordNueva"> Nueva contraseña </label>
+
+          <div class="input-container password-container">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z"></path>
+
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+            </span>
+
+            <input
+              id="passwordNueva"
+              class="form-control"
+              [type]="mostrarNueva() ? 'text' : 'password'"
+              name="passwordNueva"
+              autocomplete="new-password"
+              minlength="8"
+              placeholder="Mínimo 8 caracteres"
+              [ngModel]="passwordNueva()"
+              (ngModelChange)="passwordNueva.set($event)"
+              [disabled]="cambiandoPassword()"
+              required
+            />
+
+            <button type="button" class="visibility-button" (click)="alternarPasswordNueva()">
+              {{ mostrarNueva() ? 'Ocultar' : 'Ver' }}
+            </button>
+          </div>
+
+          <small class="field-help"> Usa al menos 8 caracteres. </small>
+        </div>
+
+        <div class="field-group">
+          <label for="confirmarPassword"> Confirmar contraseña </label>
+
+          <div
+            class="input-container password-container"
+            [class.invalid-field]="!passwordsCoinciden()"
+          >
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z"></path>
+
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+            </span>
+
+            <input
+              id="confirmarPassword"
+              class="form-control"
+              [type]="mostrarConfirmacion() ? 'text' : 'password'"
+              name="confirmarPassword"
+              autocomplete="new-password"
+              placeholder="Repite la nueva contraseña"
+              [ngModel]="confirmarPassword()"
+              (ngModelChange)="confirmarPassword.set($event)"
+              [disabled]="cambiandoPassword()"
+              required
+            />
+
+            <button type="button" class="visibility-button" (click)="alternarConfirmacion()">
+              {{ mostrarConfirmacion() ? 'Ocultar' : 'Ver' }}
+            </button>
+          </div>
+
+          <small *ngIf="!passwordsCoinciden()" class="field-error">
+            Las contraseñas no coinciden.
+          </small>
+        </div>
+
+        <footer class="card-actions">
+          <button
+            class="security-button"
+            type="submit"
+            [disabled]="cambiandoPassword() || !passwordsCoinciden()"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z"></path>
+
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+
+            {{ cambiandoPassword() ? 'Actualizando...' : 'Actualizar contraseña' }}
+          </button>
+        </footer>
+      </form>
+    </div>
+  </ng-container>
+</section>

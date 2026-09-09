@@ -1,0 +1,299 @@
+<main class="sigt-home">
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div *ngIf="avisoVisible()" class="availability-banner">
+        <div class="availability-text">
+          <span class="availability-dot"></span>
+
+          <div>
+            <strong> ¡Estamos disponibles! </strong>
+
+            <span> Reserva experiencias en Guayaquil de forma rápida y segura. </span>
+          </div>
+        </div>
+
+        <button type="button" aria-label="Cerrar aviso" (click)="cerrarAviso()">×</button>
+      </div>
+
+      <div class="hero-copy">
+        <span class="hero-tag"> Explora Guayaquil con SITG </span>
+
+        <h1>Descubre experiencias únicas en Guayaquil</h1>
+
+        <p>
+          Tours históricos, culturales, ecológicos y gastronómicos, organizados para que disfrutes
+          cada momento.
+        </p>
+
+        <div class="hero-actions">
+          <a routerLink="/tours" class="btn-primary-home">
+            Explorar tours
+            <span>→</span>
+          </a>
+
+          <a routerLink="/about" class="btn-secondary-home"> Conocer SITG </a>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <article>
+          <strong> {{ totalTours() || 6 }}+ </strong>
+
+          <span> Tours disponibles </span>
+        </article>
+
+        <article>
+          <strong>6</strong>
+
+          <span> Categorías turísticas </span>
+        </article>
+
+        <article>
+          <strong>
+            {{ textoPromedioOpiniones() }}
+          </strong>
+
+          <span> Valoración promedio </span>
+        </article>
+      </div>
+    </div>
+
+    <div class="hero-curve"></div>
+  </section>
+
+  <!-- OPINIONES DESDE POSTGRESQL -->
+  <section class="reviews-section">
+    <div class="content-container reviews-layout">
+      <div class="reviews-summary">
+        <span class="section-kicker"> Opiniones reales </span>
+
+        <h2>Experiencias que hablan por nosotros</h2>
+
+        <div class="rating-large">
+          <strong>
+            {{ textoPromedioOpiniones() }}
+          </strong>
+
+          <div class="stars">★★★★★</div>
+
+          <span> {{ totalOpiniones() }} comentarios guardados en PostgreSQL </span>
+        </div>
+      </div>
+
+      <div *ngIf="cargandoOpiniones()" class="reviews-status">
+        <span class="loader light"></span>
+        Cargando comentarios...
+      </div>
+
+      <div *ngIf="!cargandoOpiniones() && errorOpiniones()" class="reviews-status error">
+        {{ errorOpiniones() }}
+      </div>
+
+      <div
+        *ngIf="!cargandoOpiniones() && !errorOpiniones() && opiniones().length === 0"
+        class="reviews-status"
+      >
+        Todavía no existen comentarios publicados.
+      </div>
+
+      <div
+        *ngIf="!cargandoOpiniones() && !errorOpiniones() && opiniones().length > 0"
+        class="reviews-grid"
+      >
+        <article *ngFor="let opinion of opiniones()" class="review-card">
+          <header>
+            <span class="avatar-review">
+              {{ inicialesOpinion(opinion) }}
+            </span>
+
+            <div>
+              <strong>
+                {{ opinion.nombreUsuario }}
+              </strong>
+
+              <small>
+                {{ fechaOpinion(opinion.fechaCreacion) }}
+              </small>
+            </div>
+          </header>
+
+          <div class="review-stars">
+            {{ estrellasOpinion(opinion.puntuacion) }}
+          </div>
+
+          <a
+            *ngIf="opinion.nombreTour"
+            class="review-tour"
+            [routerLink]="['/tour', opinion.idTour]"
+          >
+            {{ opinion.nombreTour }}
+          </a>
+
+          <p>
+            {{ opinion.comentario }}
+          </p>
+
+          <span class="review-trip-type">
+            {{ opinion.tipoViaje || 'Viaje' }} ·
+            {{ opinion.ciudad || 'Ecuador' }}
+          </span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARRUSEL DE TOURS -->
+  <section
+    class="featured-section"
+    (mouseenter)="pausarCarrusel()"
+    (mouseleave)="reanudarCarrusel()"
+  >
+    <div class="content-container">
+      <header class="section-heading">
+        <div>
+          <span class="section-kicker"> Tours destacados </span>
+
+          <h2>Elige tu próxima experiencia</h2>
+
+          <p>Los tours cambian automáticamente cada 5 segundos y se cargan desde PostgreSQL.</p>
+        </div>
+
+        <a routerLink="/tours" class="all-tours-link">
+          Ver todos
+          <span>→</span>
+        </a>
+      </header>
+
+      <div *ngIf="cargando()" class="home-status">
+        <span class="loader"></span>
+        Cargando experiencias...
+      </div>
+
+      <div *ngIf="!cargando() && error()" class="home-status error">
+        {{ error() }}
+      </div>
+
+      <div *ngIf="!cargando() && !error() && toursCarrusel().length > 0" class="carousel-shell">
+        <button
+          *ngIf="totalTours() > 1"
+          type="button"
+          class="carousel-arrow previous"
+          aria-label="Mostrar tours anteriores"
+          (click)="anteriorCarrusel()"
+        >
+          ‹
+        </button>
+
+        <div class="featured-grid">
+          <article *ngFor="let tour of toursCarrusel()" class="featured-card">
+            <div class="featured-image">
+              <img
+                [src]="obtenerImagen(tour)"
+                [alt]="obtenerTitulo(tour)"
+                loading="lazy"
+                (error)="imagenError($event)"
+              />
+
+              <span class="category-pill">
+                {{ obtenerCategoria(tour) }}
+              </span>
+            </div>
+
+            <div class="featured-body">
+              <h3>
+                {{ obtenerTitulo(tour) }}
+              </h3>
+
+              <p>
+                {{ obtenerDescripcion(tour) }}
+              </p>
+
+              <div class="featured-footer">
+                <div>
+                  <small>Desde</small>
+
+                  <strong>
+                    {{ obtenerPrecio(tour) }}
+                  </strong>
+                </div>
+
+                <a [routerLink]="['/tour', obtenerId(tour)]"> Ver detalles </a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <button
+          *ngIf="totalTours() > 1"
+          type="button"
+          class="carousel-arrow next"
+          aria-label="Mostrar siguientes tours"
+          (click)="siguienteCarrusel()"
+        >
+          ›
+        </button>
+      </div>
+
+      <div
+        *ngIf="!cargando() && !error() && toursCarrusel().length > 0 && totalTours() > 1"
+        class="carousel-dots"
+        aria-label="Seleccionar grupo de tours"
+      >
+        <button
+          *ngFor="let punto of indicadoresCarrusel()"
+          type="button"
+          [class.active]="indiceCarrusel() === punto"
+          [attr.aria-label]="'Mostrar tours desde la posición ' + (punto + 1)"
+          (click)="seleccionarCarrusel(punto)"
+        ></button>
+      </div>
+
+      <div *ngIf="!cargando() && !error() && toursCarrusel().length === 0" class="home-status">
+        Todavía no hay tours disponibles.
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section class="benefits-section">
+    <div class="content-container benefits-grid">
+      <article>
+        <span class="benefit-icon">01</span>
+        <h3>Reservas sencillas</h3>
+        <p>Elige un tour, selecciona personas y confirma en pocos pasos.</p>
+      </article>
+
+      <article>
+        <span class="benefit-icon">02</span>
+        <h3>Información clara</h3>
+        <p>Consulta duración, precio, categoría y punto de encuentro.</p>
+      </article>
+
+      <article>
+        <span class="benefit-icon">03</span>
+        <h3>Gestión segura</h3>
+        <p>Revisa tus reservas, pagos y favoritos desde tu cuenta.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="home-cta">
+    <div class="content-container">
+      <div class="cta-panel">
+        <div>
+          <span class="section-kicker light"> Tu próxima aventura </span>
+
+          <h2>Guayaquil tiene mucho por descubrir</h2>
+
+          <p>Crea tu cuenta, guarda favoritos y reserva la experiencia ideal.</p>
+        </div>
+
+        <a routerLink="/registro" class="cta-button"> Crear cuenta </a>
+      </div>
+    </div>
+  </section>
+</main>

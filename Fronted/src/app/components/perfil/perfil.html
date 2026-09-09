@@ -1,0 +1,242 @@
+<section class="perfil-page">
+  <div class="perfil-container">
+    <!-- CARGANDO -->
+    <div *ngIf="cargando()" class="estado-carga" role="status">
+      <span class="spinner"></span>
+      <p>Cargando tu perfil...</p>
+    </div>
+
+    <ng-container *ngIf="!cargando()">
+      <!-- MENSAJES -->
+      <div *ngIf="error()" class="alerta alerta-error" role="alert">
+        {{ error() }}
+      </div>
+
+      <div *ngIf="mensaje()" class="alerta alerta-exito" role="status">
+        {{ mensaje() }}
+      </div>
+
+      <!-- CABECERA DEL PERFIL -->
+      <header class="perfil-hero">
+        <div class="hero-decoration hero-decoration-left"></div>
+        <div class="hero-decoration hero-decoration-right"></div>
+
+        <div class="avatar-wrapper">
+          <img
+            [src]="fotoPerfil()"
+            [alt]="'Foto de perfil de ' + nombre()"
+            class="avatar-img"
+            (error)="imagenError($event)"
+          />
+
+          <button
+            type="button"
+            class="avatar-camera"
+            title="Cambiar foto"
+            aria-label="Cambiar foto de perfil"
+            (click)="archivoFoto.click()"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 8h3l1.5-2h7L17 8h3v11H4z"></path>
+              <circle cx="12" cy="13" r="3.5"></circle>
+            </svg>
+          </button>
+        </div>
+
+        <input
+          #archivoFoto
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif"
+          class="archivo-oculto"
+          (change)="seleccionarFoto($event)"
+        />
+
+        <div class="foto-actions">
+          <button type="button" class="btn-cambiar-foto" (click)="archivoFoto.click()">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 8h3l1.5-2h7L17 8h3v11H4z"></path>
+              <circle cx="12" cy="13" r="3.5"></circle>
+            </svg>
+            Cambiar foto de perfil
+          </button>
+
+          <button
+            *ngIf="fotoPerfil() !== '/gente.png'"
+            type="button"
+            class="btn-quitar-foto"
+            (click)="restaurarFoto()"
+          >
+            Quitar foto
+          </button>
+        </div>
+
+        <h1>{{ nombre() }}</h1>
+        <p>{{ email() }}</p>
+      </header>
+
+      <!-- ESTADÍSTICAS -->
+      <div class="stats-grid">
+        <a routerLink="/mis-reservas" class="stat-card">
+          <span class="stat-icon stat-icon-reservas">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="4" y="6" width="16" height="14" rx="2"></rect>
+              <path d="M8 3v6M16 3v6M4 10h16"></path>
+            </svg>
+          </span>
+
+          <span class="stat-content">
+            <strong>{{ reservas() }}</strong>
+            <span>Reservas</span>
+          </span>
+
+          <span class="stat-arrow">›</span>
+        </a>
+
+        <a routerLink="/favoritos" class="stat-card">
+          <span class="stat-icon stat-icon-favoritos">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 21s-7-4.5-9-8.5C1.3 9.2 3.2 5 7.1 5c2.1 0 3.8 1.1 4.9 2.8C13.1 6.1 14.8 5 16.9 5c3.9 0 5.8 4.2 4.1 7.5C19 16.5 12 21 12 21Z"
+              ></path>
+            </svg>
+          </span>
+
+          <span class="stat-content">
+            <strong>{{ favoritos() }}</strong>
+            <span>Favoritos</span>
+          </span>
+
+          <span class="stat-arrow">›</span>
+        </a>
+      </div>
+
+      <!-- FORMULARIO -->
+      <form class="datos-card" (ngSubmit)="guardar()">
+        <div class="datos-header">
+          <span class="datos-header-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M5 21a7 7 0 0 1 14 0"></path>
+            </svg>
+          </span>
+
+          <div>
+            <h2>Mis datos</h2>
+            <p>Gestiona tu información personal y mantén tus datos actualizados.</p>
+          </div>
+        </div>
+
+        <div class="datos-divider"></div>
+
+        <div class="form-group">
+          <label for="perfilNombre">Nombre</label>
+
+          <div class="input-wrapper">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M5 21a7 7 0 0 1 14 0"></path>
+            </svg>
+
+            <input
+              id="perfilNombre"
+              type="text"
+              name="nombre"
+              maxlength="150"
+              autocomplete="name"
+              [ngModel]="nombre()"
+              (ngModelChange)="nombre.set($event)"
+              [disabled]="guardando()"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="perfilCorreo">Correo electrónico</label>
+
+          <div class="input-wrapper">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+              <path d="m4 7 8 6 8-6"></path>
+            </svg>
+
+            <input
+              id="perfilCorreo"
+              type="email"
+              name="email"
+              maxlength="150"
+              autocomplete="email"
+              [ngModel]="email()"
+              (ngModelChange)="email.set($event)"
+              [disabled]="guardando()"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="perfilTelefono">Teléfono</label>
+
+          <div class="input-wrapper">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M6.5 3h3l1.4 4-2 1.8a15 15 0 0 0 6.3 6.3l1.8-2 4 1.4v3c0 1.1-.9 2-2 2C10.7 19.5 4.5 13.3 4.5 5c0-1.1.9-2 2-2Z"
+              ></path>
+            </svg>
+
+            <input
+              id="perfilTelefono"
+              type="tel"
+              name="telefono"
+              maxlength="30"
+              autocomplete="tel"
+              placeholder="Ej. 0993333333"
+              [ngModel]="telefono()"
+              (ngModelChange)="telefono.set($event)"
+              [disabled]="guardando()"
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn-cancelar"
+            [disabled]="guardando()"
+            (click)="cancelarCambios()"
+          >
+            Cancelar cambios
+          </button>
+
+          <button type="submit" class="btn-guardar" [disabled]="guardando()">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 4h12l2 2v14H5z"></path>
+              <path d="M8 4v6h8V4M8 20v-6h8v6"></path>
+            </svg>
+
+            {{ guardando() ? 'Guardando...' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
+
+      <!-- LLAMADO A LA ACCIÓN -->
+      <section class="aventura-card">
+        <div class="aventura-ilustracion">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="18" y="17" width="31" height="38" rx="6"></rect>
+            <path d="M26 17v-5h15v5M24 29h19M24 38h19"></path>
+            <circle cx="25" cy="56" r="3"></circle>
+            <circle cx="43" cy="56" r="3"></circle>
+          </svg>
+        </div>
+
+        <div class="aventura-texto">
+          <h3>¿Listo para tu próxima aventura?</h3>
+          <p>Explora experiencias en Guayaquil y crea recuerdos inolvidables.</p>
+        </div>
+
+        <a routerLink="/tours" class="btn-explorar"> Explorar tours </a>
+      </section>
+    </ng-container>
+  </div>
+</section>

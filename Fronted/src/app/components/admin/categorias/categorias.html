@@ -1,0 +1,183 @@
+<section class="admin-page">
+  <header class="admin-heading">
+    <div>
+      <span class="admin-tag"> Administración </span>
+
+      <h1>Categorías de tours</h1>
+
+      <p>Crea y administra las categorías disponibles para los tours.</p>
+    </div>
+
+    <div class="header-actions">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        [disabled]="cargando()"
+        (click)="cargar()"
+      >
+        Recargar
+      </button>
+
+      <button type="button" class="btn btn-primary" (click)="nueva()">Nueva categoría</button>
+    </div>
+  </header>
+
+  <div *ngIf="error()" class="alert alert-danger">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="mensaje()" class="alert alert-success">
+    {{ mensaje() }}
+  </div>
+
+  <form *ngIf="mostrarFormulario" class="form-card" (ngSubmit)="guardar()">
+    <div class="form-heading">
+      <h2>
+        {{ editandoId ? 'Editar categoría' : 'Crear categoría' }}
+      </h2>
+
+      <button type="button" class="btn-close" aria-label="Cerrar" (click)="cancelar()"></button>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-5">
+        <label for="nombreCategoria" class="form-label"> Nombre </label>
+
+        <input
+          id="nombreCategoria"
+          class="form-control"
+          name="nombre"
+          [(ngModel)]="formulario.nombre"
+          required
+        />
+      </div>
+
+      <div class="col-md-7">
+        <label for="descripcionCategoria" class="form-label"> Descripción </label>
+
+        <input
+          id="descripcionCategoria"
+          class="form-control"
+          name="descripcion"
+          [(ngModel)]="formulario.descripcion"
+        />
+      </div>
+
+      <div *ngIf="editandoId" class="col-12">
+        <div class="form-check">
+          <input
+            id="categoriaActiva"
+            class="form-check-input"
+            type="checkbox"
+            name="activo"
+            [(ngModel)]="formulario.activo"
+          />
+
+          <label for="categoriaActiva" class="form-check-label"> Categoría activa </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-success" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : editandoId ? 'Guardar cambios' : 'Crear categoría' }}
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        [disabled]="guardando()"
+        (click)="cancelar()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+
+  <article class="panel-card">
+    <div *ngIf="cargando()" class="alert alert-info">Cargando categorías...</div>
+
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Categoría</th>
+            <th>Descripción</th>
+            <th>Tours</th>
+            <th>Tours activos</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let categoria of categorias()">
+            <td>
+              <strong>
+                {{ categoria.nombre }}
+              </strong>
+            </td>
+
+            <td>
+              {{ categoria.descripcion || 'Sin descripción' }}
+            </td>
+
+            <td>
+              {{ categoria.total_tours || 0 }}
+            </td>
+
+            <td>
+              {{ categoria.tours_activos || 0 }}
+            </td>
+
+            <td>
+              <span
+                class="badge"
+                [ngClass]="categoria.activo ? 'text-bg-success' : 'text-bg-secondary'"
+              >
+                {{ categoria.activo ? 'Activa' : 'Inactiva' }}
+              </span>
+            </td>
+
+            <td>
+              <div class="table-actions">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  [disabled]="procesandoId() === categoria.id_categoria"
+                  (click)="editar(categoria)"
+                >
+                  Editar
+                </button>
+
+                <button
+                  *ngIf="categoria.activo"
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                  [disabled]="procesandoId() === categoria.id_categoria"
+                  (click)="desactivar(categoria)"
+                >
+                  Desactivar
+                </button>
+
+                <button
+                  *ngIf="!categoria.activo"
+                  type="button"
+                  class="btn btn-outline-success btn-sm"
+                  [disabled]="procesandoId() === categoria.id_categoria"
+                  (click)="activar(categoria)"
+                >
+                  Activar
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="!cargando() && categorias().length === 0">
+            <td colspan="6" class="text-center py-4">No hay categorías registradas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>

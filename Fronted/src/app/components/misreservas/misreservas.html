@@ -1,0 +1,270 @@
+<section class="mis-reservas-page">
+  <div class="mis-reservas-contenido">
+    <!-- ENCABEZADO -->
+    <header class="pagina-encabezado">
+      <div>
+        <span class="pagina-etiqueta"> Panel del usuario </span>
+
+        <h1>Mis reservas</h1>
+
+        <p>Revisa el estado de tus reservas y de los pagos realizados.</p>
+      </div>
+
+      <a routerLink="/tours" class="btn-explorar">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+
+          <path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8 4.8-2.2Z"></path>
+        </svg>
+
+        <span>Explorar tours</span>
+      </a>
+    </header>
+
+    <!-- CARGANDO -->
+    <div *ngIf="cargando()" class="estado-pagina estado-cargando" aria-live="polite">
+      <span class="spinner"></span>
+
+      <div>
+        <strong>Cargando reservas</strong>
+        <p>Estamos consultando tus reservas.</p>
+      </div>
+    </div>
+
+    <!-- ERROR -->
+    <div *ngIf="!cargando() && error()" class="estado-pagina estado-error" role="alert">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"></circle>
+
+        <path d="M12 7v6"></path>
+        <path d="M12 17h.01"></path>
+      </svg>
+
+      <div>
+        <strong>No se pudieron cargar las reservas</strong>
+        <p>{{ error() }}</p>
+      </div>
+    </div>
+
+    <!-- SIN RESERVAS -->
+    <div *ngIf="!cargando() && !error() && reservas().length === 0" class="sin-reservas">
+      <div class="sin-reservas-icono">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 7h14v12H5z"></path>
+
+          <path d="M8 4v6M16 4v6M5 11h14"></path>
+        </svg>
+      </div>
+
+      <h2>Todavía no tienes reservas</h2>
+
+      <p>Explora los tours disponibles y reserva tu próxima experiencia.</p>
+
+      <a routerLink="/tours" class="btn-explorar-vacio"> Ver tours disponibles </a>
+    </div>
+
+    <!-- LISTADO -->
+    <div *ngIf="!cargando() && !error() && reservas().length > 0" class="reservas-grid">
+      <article *ngFor="let reserva of reservas()" class="reserva-card">
+        <!-- IMAGEN -->
+        <div class="reserva-imagen-contenedor">
+          <img
+            [src]="reserva.imagen"
+            [alt]="reserva.nombreTour || reserva.tour"
+            class="reserva-imagen"
+            loading="lazy"
+            (error)="imagenError($event)"
+          />
+
+          <span class="estado-badge" [ngClass]="reserva.badgeClass">
+            <span class="estado-punto"></span>
+
+            {{ reserva.estado }}
+          </span>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="reserva-body">
+          <div class="reserva-titulo">
+            <div>
+              <span class="reserva-numero"> Reserva #{{ reserva.idReserva || reserva.id }} </span>
+
+              <h2>
+                {{ reserva.nombreTour || reserva.tour }}
+              </h2>
+            </div>
+          </div>
+
+          <div class="reserva-datos">
+            <div class="dato-reserva">
+              <span class="dato-icono">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="4" y="6" width="16" height="14" rx="2"></rect>
+
+                  <path d="M8 3v6M16 3v6M4 10h16"></path>
+                </svg>
+              </span>
+
+              <div>
+                <span>Fecha del tour</span>
+
+                <strong>
+                  {{ reserva.fechaTour | date: 'dd/MM/yyyy' }}
+                </strong>
+              </div>
+            </div>
+
+            <div class="dato-reserva">
+              <span class="dato-icono">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4"></circle>
+
+                  <path d="M5 21a7 7 0 0 1 14 0"></path>
+                </svg>
+              </span>
+
+              <div>
+                <span>Personas</span>
+
+                <strong>
+                  {{ reserva.cantidadAdultos }} adulto(s)
+                  <ng-container *ngIf="reserva.cantidadMenores > 0">
+                    · {{ reserva.cantidadMenores }} menor(es)
+                  </ng-container>
+                </strong>
+              </div>
+            </div>
+
+            <div class="dato-reserva">
+              <span class="dato-icono">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 7h16v10H4z"></path>
+
+                  <path d="M7 10h4M7 14h2"></path>
+                </svg>
+              </span>
+
+              <div>
+                <span>Total</span>
+
+                <strong class="precio-total">
+                  {{ reserva.precioTotal | currency: 'USD' : 'symbol' : '1.2-2' }}
+                </strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- MENSAJES DE PAGO -->
+          <div *ngIf="reserva.estadoPago === 'pendiente'" class="pago-estado pago-pendiente">
+            <span class="pago-estado-icono">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+
+                <path d="M12 7v5l3 2"></path>
+              </svg>
+            </span>
+
+            <div>
+              <strong>Pago en revisión</strong>
+
+              <p>El administrador está revisando tu comprobante.</p>
+            </div>
+          </div>
+
+          <div *ngIf="reserva.estadoPago === 'pagado'" class="pago-estado pago-aprobado">
+            <span class="pago-estado-icono">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+
+                <path d="m8 12 2.5 2.5L16 9"></path>
+              </svg>
+            </span>
+
+            <div>
+              <strong>Pago aprobado</strong>
+
+              <p>Tu reserva está confirmada.</p>
+            </div>
+          </div>
+
+          <div *ngIf="reserva.estadoPago === 'rechazado'" class="pago-estado pago-rechazado">
+            <span class="pago-estado-icono">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+
+                <path d="m9 9 6 6M15 9l-6 6"></path>
+              </svg>
+            </span>
+
+            <div>
+              <strong>Pago rechazado</strong>
+
+              <p>Puedes volver a enviar el pago.</p>
+            </div>
+          </div>
+
+          <div *ngIf="reserva.estadoPago === 'reembolsado'" class="pago-estado pago-reembolsado">
+            <span class="pago-estado-icono">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 8H4V4"></path>
+
+                <path d="M4 8a8 8 0 1 1 2 9"></path>
+              </svg>
+            </span>
+
+            <div>
+              <strong>Pago reembolsado</strong>
+
+              <p>El pago fue devuelto y la reserva quedó cancelada.</p>
+            </div>
+          </div>
+
+          <!-- ACCIONES -->
+          <div class="reserva-acciones">
+            <a class="btn-reserva btn-ver" [routerLink]="['/tour', reserva.idTour]">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
+
+                <circle cx="12" cy="12" r="2.5"></circle>
+              </svg>
+
+              <span>Ver tour</span>
+            </a>
+
+            <a
+              *ngIf="
+                reserva.estado !== 'Cancelada' &&
+                (!reserva.estadoPago || reserva.estadoPago === 'rechazado')
+              "
+              class="btn-reserva btn-pagar"
+              [routerLink]="['/pago', reserva.idReserva || reserva.id]"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+
+                <path d="M3 10h18M7 15h3"></path>
+              </svg>
+
+              <span>
+                {{ reserva.estadoPago === 'rechazado' ? 'Reenviar pago' : 'Pagar reserva' }}
+              </span>
+            </a>
+
+            <button
+              *ngIf="reserva.estado !== 'Cancelada'"
+              type="button"
+              class="btn-reserva btn-cancelar"
+              (click)="cancelar(reserva)"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"></path>
+              </svg>
+
+              <span>Cancelar reserva</span>
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,74 @@
+<section class="favoritos-page">
+  <div class="favoritos-container">
+    <header class="favoritos-header">
+      <div>
+        <span class="favoritos-tag"> Mi colección </span>
+
+        <h1>Mis favoritos</h1>
+
+        <p>Tus tours guardados se sincronizan con tu cuenta.</p>
+      </div>
+
+      <a routerLink="/tours" class="btn-explorar"> Explorar tours </a>
+    </header>
+
+    <div *ngIf="cargando()" class="estado estado-carga">Cargando tus favoritos...</div>
+
+    <div *ngIf="!cargando() && error()" class="estado estado-error" role="alert">
+      {{ error() }}
+    </div>
+
+    <div *ngIf="!cargando() && !error() && favoritos().length === 0" class="estado estado-vacio">
+      <h2>No tienes tours guardados</h2>
+
+      <p>Usa el corazón de una experiencia para agregarla a esta sección.</p>
+
+      <a routerLink="/tours" class="btn-explorar"> Ver tours disponibles </a>
+    </div>
+
+    <div *ngIf="!cargando() && !error() && favoritos().length > 0" class="favoritos-grid">
+      <article *ngFor="let tour of favoritos()" class="favorito-card">
+        <div class="imagen-contenedor">
+          <img [src]="tour.image" [alt]="tour.title" loading="lazy" (error)="imagenError($event)" />
+
+          <button
+            type="button"
+            class="btn-quitar"
+            [disabled]="procesando(tour)"
+            [attr.aria-label]="'Quitar ' + tour.title + ' de favoritos'"
+            (click)="eliminar(tour)"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 21s-7-4.5-9.2-8.3C.9 9.5 2.1 5.5 5.7 4.4c2.1-.7 4.2.2 5.3 2 1.1-1.8 3.2-2.7 5.3-2 3.6 1.1 4.8 5.1 2.9 8.3C19 16.5 12 21 12 21Z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="favorito-body">
+          <div class="favorito-meta">
+            <span>{{ tour.duration }}</span>
+            <span>{{ tour.rating }}</span>
+          </div>
+
+          <h2>{{ tour.title }}</h2>
+
+          <p *ngIf="tour.price" class="precio">
+            {{ tour.price }}
+          </p>
+
+          <div class="favorito-actions">
+            <a class="btn-detalle" [routerLink]="['/tour', tour.idTour || tour.id]">
+              Ver detalles
+            </a>
+
+            <a class="btn-reservar" [routerLink]="['/reserva', tour.idTour || tour.id]">
+              Reservar
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,221 @@
+<section *ngIf="cargando()" class="reserva-estado">
+  <span class="spinner"></span>
+  <p>Cargando información del tour...</p>
+</section>
+
+<section *ngIf="!cargando() && !tour()" class="reserva-estado">
+  <div class="estado-error">
+    <h2>No se pudo iniciar la reserva</h2>
+    <p>{{ error() }}</p>
+    <a routerLink="/tours">Volver a tours</a>
+  </div>
+</section>
+
+<main *ngIf="!cargando() && tour() as tourActual" class="reserva-page">
+  <header class="reserva-cabecera">
+    <div class="contenedor-reserva">
+      <a [routerLink]="['/tour', tourActual.idTour || tourActual.id]" class="volver-link">
+        Volver al tour
+      </a>
+
+      <span>Reserva segura</span>
+      <h1>Completa tu reserva</h1>
+      <p>Selecciona la fecha y las personas que participarán en la experiencia.</p>
+    </div>
+  </header>
+
+  <section class="contenedor-reserva reserva-layout">
+    <article class="tour-resumen">
+      <img
+        [src]="obtenerImagen(tourActual)"
+        [alt]="obtenerTitulo(tourActual)"
+        (error)="imagenError($event)"
+      />
+
+      <div class="tour-resumen-body">
+        <div class="etiquetas-tour">
+          <span>{{ tourActual.duration }}</span>
+          <span>{{ tourActual.categoria }}</span>
+        </div>
+
+        <h2>{{ obtenerTitulo(tourActual) }}</h2>
+        <p>{{ obtenerDescripcion(tourActual) }}</p>
+
+        <div class="datos-tour">
+          <div>
+            <span>Precio adulto</span>
+            <strong>
+              {{ precioAdulto() | currency: 'USD' : 'symbol' : '1.2-2' }}
+            </strong>
+          </div>
+
+          <div>
+            <span> Menores de {{ tourActual.edadGratis }} años </span>
+            <strong>{{ precioMenorTexto() }}</strong>
+          </div>
+
+          <div>
+            <span>Cupos disponibles</span>
+            <strong>{{ cuposDisponibles() }}</strong>
+          </div>
+
+          <div>
+            <span>Punto de encuentro</span>
+            <strong>
+              {{ tourActual.puntoEncuentro || 'Por confirmar' }}
+            </strong>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <aside class="form-reserva">
+      <header>
+        <span>Datos de la reserva</span>
+        <h2>Selecciona tu experiencia</h2>
+      </header>
+
+      <div *ngIf="error()" class="mensaje error">
+        {{ error() }}
+      </div>
+
+      <div *ngIf="mensaje()" class="mensaje exito">
+        {{ mensaje() }}
+      </div>
+
+      <label for="fechaReserva">Fecha</label>
+      <input
+        id="fechaReserva"
+        type="date"
+        [min]="minDate"
+        [value]="fecha()"
+        [disabled]="guardando()"
+        (input)="actualizarFecha($event)"
+        (change)="actualizarFecha($event)"
+      />
+
+      <small>
+        <ng-container *ngIf="!consultandoCupos(); else consultando">
+          {{ cuposDisponibles() }} cupos para esta fecha
+        </ng-container>
+        <ng-template #consultando> Consultando cupos... </ng-template>
+      </small>
+
+      <label>Personas</label>
+      <button
+        type="button"
+        class="selector-personas"
+        [disabled]="guardando() || consultandoCupos()"
+        (click)="abrirSelector()"
+      >
+        <span>{{ resumenPersonas() }}</span>
+        <strong>Editar</strong>
+      </button>
+
+      <div class="desglose">
+        <div>
+          <span> {{ adultos() }} adulto(s) </span>
+          <strong>
+            {{ adultos() * precioAdulto() | currency: 'USD' : 'symbol' : '1.2-2' }}
+          </strong>
+        </div>
+
+        <div *ngIf="menores() > 0">
+          <span> {{ menores() }} menor(es) </span>
+          <strong>
+            {{ menores() * precioMenor() | currency: 'USD' : 'symbol' : '1.2-2' }}
+          </strong>
+        </div>
+
+        <div class="total-reserva">
+          <span>Total a pagar</span>
+          <strong>
+            {{ total() | currency: 'USD' : 'symbol' : '1.2-2' }}
+          </strong>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn-confirmar"
+        [disabled]="!puedeReservar() || guardando()"
+        (click)="reservar()"
+      >
+        {{ guardando() ? 'Confirmando...' : 'Confirmar reserva' }}
+      </button>
+
+      <p class="nota-reserva">
+        La reserva se crea como Pendiente, luego podrás enviar el pago desde Mis reservas.
+      </p>
+    </aside>
+  </section>
+
+  <div *ngIf="selectorAbierto()" class="modal-fondo" (click)="cerrarSelector()">
+    <section class="modal-personas" (click)="$event.stopPropagation()">
+      <header>
+        <div>
+          <span>Selecciona los viajeros</span>
+          <h2>Personas</h2>
+        </div>
+        <button type="button" class="cerrar-modal" (click)="cerrarSelector()">×</button>
+      </header>
+
+      <div class="fila-persona">
+        <div>
+          <strong>Adultos</strong>
+          <span>
+            {{ precioAdulto() | currency: 'USD' : 'symbol' : '1.2-2' }}
+            por persona
+          </span>
+        </div>
+
+        <div class="contador">
+          <button type="button" [disabled]="adultosTemporales() <= 1" (click)="cambiarAdultos(-1)">
+            −
+          </button>
+          <strong>{{ adultosTemporales() }}</strong>
+          <button
+            type="button"
+            [disabled]="adultosTemporales() + menoresTemporales() >= cuposDisponibles()"
+            (click)="cambiarAdultos(1)"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
+      <div class="fila-persona">
+        <div>
+          <strong> Menores de {{ tourActual.edadGratis }} años </strong>
+          <span>{{ precioMenorTexto() }}</span>
+        </div>
+
+        <div class="contador">
+          <button type="button" [disabled]="menoresTemporales() <= 0" (click)="cambiarMenores(-1)">
+            −
+          </button>
+          <strong>{{ menoresTemporales() }}</strong>
+          <button
+            type="button"
+            [disabled]="adultosTemporales() + menoresTemporales() >= cuposDisponibles()"
+            (click)="cambiarMenores(1)"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-total">
+        <span>Total</span>
+        <strong>
+          {{ totalTemporal() | currency: 'USD' : 'symbol' : '1.2-2' }}
+        </strong>
+      </div>
+
+      <footer>
+        <button type="button" class="btn-cancelar" (click)="cerrarSelector()">Cancelar</button>
+        <button type="button" class="btn-aceptar" (click)="aceptarSelector()">Aceptar</button>
+      </footer>
+    </section>
+  </div>
+</main>

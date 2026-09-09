@@ -1,0 +1,363 @@
+<section class="reports-page">
+  <header class="reports-heading">
+    <div>
+      <span class="page-tag">Administración</span>
+      <h1>Reportes</h1>
+      <p>Analiza reservas, pagos, ingresos y rendimiento de los tours.</p>
+    </div>
+
+    <div class="header-actions no-print">
+      <button
+        type="button"
+        class="secondary-button"
+        [disabled]="cargando() || !reporte()"
+        (click)="exportarCsv()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3v12"></path>
+          <path d="m7 10 5 5 5-5"></path>
+          <path d="M5 21h14"></path>
+        </svg>
+        Exportar CSV
+      </button>
+
+      <button
+        type="button"
+        class="pdf-button"
+        [disabled]="cargando() || !reporte()"
+        (click)="guardarPdf()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 3h9l3 3v15H6V3Z"></path>
+          <path d="M14 3v4h4"></path>
+          <path d="M8.5 12h7M8.5 15h7M8.5 18h4"></path>
+        </svg>
+        Guardar PDF
+      </button>
+    </div>
+  </header>
+
+  <article class="filter-card no-print">
+    <div class="filter-copy">
+      <span class="filter-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+          <path d="M8 3v4M16 3v4M3 10h18"></path>
+        </svg>
+      </span>
+
+      <div>
+        <h2>Periodo del reporte</h2>
+        <p>Las reservas se filtran por fecha de creación y los ingresos por fecha de pago.</p>
+      </div>
+    </div>
+
+    <div class="filter-fields">
+      <label>
+        <span>Desde</span>
+        <input
+          type="date"
+          name="fechaDesde"
+          [ngModel]="fechaDesde()"
+          (ngModelChange)="fechaDesde.set($event)"
+          [max]="fechaHasta()"
+        />
+      </label>
+
+      <label>
+        <span>Hasta</span>
+        <input
+          type="date"
+          name="fechaHasta"
+          [ngModel]="fechaHasta()"
+          (ngModelChange)="fechaHasta.set($event)"
+          [min]="fechaDesde()"
+        />
+      </label>
+
+      <button type="button" class="primary-button" [disabled]="cargando()" (click)="cargar()">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 6h16"></path>
+          <path d="M7 12h10"></path>
+          <path d="M10 18h4"></path>
+        </svg>
+        {{ cargando() ? 'Consultando...' : 'Consultar' }}
+      </button>
+
+      <button
+        type="button"
+        class="reset-button"
+        [disabled]="cargando()"
+        (click)="restablecerPeriodo()"
+      >
+        Restablecer
+      </button>
+    </div>
+  </article>
+
+  <div *ngIf="error()" class="alert-message alert-error" role="alert">
+    <span>!</span>
+    <div>
+      <strong>No se pudo generar el reporte</strong>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="cargando()" class="loading-card" role="status">
+    <span class="loader"></span>
+    <div>
+      <strong>Generando reporte</strong>
+      <p>Consultando la información registrada en el sistema...</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!cargando() && reporte() as d">
+    <div class="print-title">
+      <h1>Reporte administrativo SITG</h1>
+      <p>Periodo: {{ fechaPresentacion(fechaDesde()) }} al {{ fechaPresentacion(fechaHasta()) }}</p>
+    </div>
+
+    <div class="report-meta">
+      <span>
+        Periodo: <strong>{{ fechaPresentacion(fechaDesde()) }}</strong> al
+        <strong>{{ fechaPresentacion(fechaHasta()) }}</strong>
+      </span>
+
+      <span *ngIf="actualizadoEn() as fecha">
+        Actualizado: <strong>{{ fecha | date: 'dd/MM/yyyy, HH:mm' }}</strong>
+      </span>
+    </div>
+
+    <div class="summary-grid">
+      <article class="summary-card income-card">
+        <span class="summary-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path
+              d="M16 8.5c-.8-.8-2-1.3-3.5-1.3-1.9 0-3.5.9-3.5 2.4 0 3.8 7 1.7 7 5.3 0 1.4-1.5 2.5-3.8 2.5-1.6 0-3-.5-4-1.5M12 5v14"
+            ></path>
+          </svg>
+        </span>
+        <div>
+          <small>Ingresos aprobados</small>
+          <strong>{{ d.resumen.ingresos_aprobados | currency: 'USD' : 'symbol' : '1.2-2' }}</strong>
+          <span>{{ d.resumen.pagos_aprobados }} pagos aprobados</span>
+        </div>
+      </article>
+
+      <article class="summary-card reservations-card">
+        <span class="summary-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+            <path d="M8 3v4M16 3v4M3 10h18"></path>
+            <path d="m8 15 2 2 5-5"></path>
+          </svg>
+        </span>
+        <div>
+          <small>Total de reservas</small>
+          <strong>{{ d.resumen.total_reservas }}</strong>
+          <span>{{ d.resumen.reservas_confirmadas }} confirmadas</span>
+        </div>
+      </article>
+
+      <article class="summary-card users-card">
+        <span class="summary-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="9" cy="8" r="3"></circle>
+            <path d="M3 20v-2a6 6 0 0 1 12 0v2"></path>
+            <path d="M16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 4.5V20"></path>
+          </svg>
+        </span>
+        <div>
+          <small>Usuarios activos</small>
+          <strong>{{ d.resumen.usuarios_activos }}</strong>
+          <span>{{ d.resumen.usuarios_registrados }} registrados</span>
+        </div>
+      </article>
+
+      <article class="summary-card tours-card">
+        <span class="summary-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="8" width="18" height="11" rx="2"></rect>
+            <path d="M7 8V5h10v3M8 13h8"></path>
+          </svg>
+        </span>
+        <div>
+          <small>Tours activos</small>
+          <strong>{{ d.resumen.tours_activos }}</strong>
+          <span>Disponibles en el sistema</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="states-grid">
+      <article class="report-card">
+        <header class="card-heading">
+          <div>
+            <span class="card-tag">Reservas</span>
+            <h2>Reservas por estado</h2>
+          </div>
+          <strong class="total-chip">{{ d.reservasPorEstado.total }} total</strong>
+        </header>
+
+        <div class="state-list">
+          <div class="state-row">
+            <div class="state-label">
+              <span class="state-dot pending-dot"></span>
+              <strong>Pendientes</strong>
+              <small>{{ d.reservasPorEstado.pendiente }}</small>
+            </div>
+            <div class="progress-track">
+              <span
+                class="progress-fill pending-fill"
+                [style.width.%]="
+                  porcentaje(d.reservasPorEstado.pendiente, d.reservasPorEstado.total)
+                "
+              ></span>
+            </div>
+            <b>{{ porcentaje(d.reservasPorEstado.pendiente, d.reservasPorEstado.total) }}%</b>
+          </div>
+
+          <div class="state-row">
+            <div class="state-label">
+              <span class="state-dot approved-dot"></span>
+              <strong>Confirmadas</strong>
+              <small>{{ d.reservasPorEstado.confirmada }}</small>
+            </div>
+            <div class="progress-track">
+              <span
+                class="progress-fill approved-fill"
+                [style.width.%]="
+                  porcentaje(d.reservasPorEstado.confirmada, d.reservasPorEstado.total)
+                "
+              ></span>
+            </div>
+            <b>{{ porcentaje(d.reservasPorEstado.confirmada, d.reservasPorEstado.total) }}%</b>
+          </div>
+
+          <div class="state-row">
+            <div class="state-label">
+              <span class="state-dot rejected-dot"></span>
+              <strong>Canceladas</strong>
+              <small>{{ d.reservasPorEstado.cancelada }}</small>
+            </div>
+            <div class="progress-track">
+              <span
+                class="progress-fill rejected-fill"
+                [style.width.%]="
+                  porcentaje(d.reservasPorEstado.cancelada, d.reservasPorEstado.total)
+                "
+              ></span>
+            </div>
+            <b>{{ porcentaje(d.reservasPorEstado.cancelada, d.reservasPorEstado.total) }}%</b>
+          </div>
+        </div>
+      </article>
+
+      <article class="report-card">
+        <header class="card-heading">
+          <div>
+            <span class="card-tag">Pagos</span>
+            <h2>Pagos por estado</h2>
+          </div>
+          <strong class="total-chip">{{ d.pagosPorEstado.total }} total</strong>
+        </header>
+
+        <div class="payment-status-grid">
+          <div class="payment-status pending-payment">
+            <small>Pendientes</small>
+            <strong>{{ d.pagosPorEstado.pendiente }}</strong>
+          </div>
+          <div class="payment-status paid-payment">
+            <small>Aprobados</small>
+            <strong>{{ d.pagosPorEstado.pagado }}</strong>
+          </div>
+          <div class="payment-status rejected-payment">
+            <small>Rechazados</small>
+            <strong>{{ d.pagosPorEstado.rechazado }}</strong>
+          </div>
+          <div class="payment-status refunded-payment">
+            <small>Reembolsados</small>
+            <strong>{{ d.pagosPorEstado.reembolsado }}</strong>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <article class="report-card income-chart-card">
+      <header class="card-heading">
+        <div>
+          <span class="card-tag">Rendimiento</span>
+          <h2>Ingresos aprobados por mes</h2>
+          <p>Solo se contabilizan pagos con estado pagado.</p>
+        </div>
+      </header>
+
+      <div *ngIf="d.ingresosPorMes.length > 0" class="chart-scroll">
+        <div class="bar-chart">
+          <div
+            *ngFor="let mes of d.ingresosPorMes"
+            class="bar-column"
+            [attr.title]="nombreMes(mes.periodo) + ': $' + (mes.ingresos | number: '1.2-2')"
+          >
+            <span class="bar-value">
+              {{ mes.ingresos | currency: 'USD' : 'symbol' : '1.0-0' }}
+            </span>
+            <div class="bar-track">
+              <span class="bar-fill" [style.height.%]="alturaIngreso(mes.ingresos)"></span>
+            </div>
+            <strong>{{ nombreMes(mes.periodo) }}</strong>
+            <small>{{ mes.pagos }} pagos</small>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="d.ingresosPorMes.length === 0" class="empty-state">
+        No hay ingresos aprobados dentro del periodo seleccionado.
+      </div>
+    </article>
+
+    <article class="report-card tours-table-card">
+      <header class="card-heading">
+        <div>
+          <span class="card-tag">Popularidad</span>
+          <h2>Tours más reservados</h2>
+          <p>Ordenados por cantidad de reservas creadas en el periodo.</p>
+        </div>
+      </header>
+
+      <div *ngIf="d.toursMasReservados.length > 0" class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Posición</th>
+              <th>Tour</th>
+              <th>Reservas</th>
+              <th>Personas</th>
+              <th>Ingresos asociados</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tour of d.toursMasReservados; let i = index">
+              <td>
+                <span class="ranking-badge">{{ i + 1 }}</span>
+              </td>
+              <td>
+                <strong>{{ tour.nombre }}</strong>
+              </td>
+              <td>{{ tour.total_reservas }}</td>
+              <td>{{ tour.total_personas }}</td>
+              <td class="income-cell">
+                {{ tour.ingresos | currency: 'USD' : 'symbol' : '1.2-2' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="d.toursMasReservados.length === 0" class="empty-state">
+        No hay reservas registradas dentro del periodo seleccionado.
+      </div>
+    </article>
+  </ng-container>
+</section>
