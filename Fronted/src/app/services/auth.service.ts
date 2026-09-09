@@ -4,6 +4,8 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { Observable, tap, timeout } from 'rxjs';
 
+import { buildApiUrl } from '../config/api.config';
+
 export type UserRole = 'user' | 'admin' | null;
 
 export interface Usuario {
@@ -51,7 +53,7 @@ export interface ActualizarPerfilDatos {
 export class AuthService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:3000/api/auth';
+  private readonly apiUrl = buildApiUrl('/api/auth');
 
   private readonly _usuario = signal<Usuario | null>(this.cargarUsuarioGuardado());
 

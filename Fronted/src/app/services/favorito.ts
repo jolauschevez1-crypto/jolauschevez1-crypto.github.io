@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 
 import { finalize } from 'rxjs';
 
+import { buildApiUrl } from '../config/api.config';
 import { AuthService } from './auth.service';
 
 export interface TourFavorito {
@@ -54,7 +55,7 @@ export class Favorito {
 
   private readonly router = inject(Router);
 
-  private readonly apiUrl = 'http://localhost:3000/api/favoritos';
+  private readonly apiUrl = buildApiUrl('/api/favoritos');
 
   private readonly _favoritos = signal<TourFavorito[]>([]);
 

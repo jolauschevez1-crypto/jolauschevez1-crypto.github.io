@@ -17,6 +17,8 @@ const PORT = Number(process.env.PORT) || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const frontendDistPath = path.join(__dirname, "../Fronted/dist/Proyecto-Tuor/browser");
+const frontendPublicPath = path.join(__dirname, "../Fronted/public");
 
 /* =========================
    CONFIGURACIÓN
@@ -24,13 +26,30 @@ const __dirname = path.dirname(__filename);
 
 app.disable("x-powered-by");
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:4200",
+  "http://127.0.0.1:4200",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:4200",
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(null, false);
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   }),
 );
+
+app.options("*", cors());
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
@@ -41,12 +60,24 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+if (fs.existsSync(frontendDistPath)) {
+  app.use(express.static(frontendDistPath));
+}
+
+if (fs.existsSync(frontendPublicPath)) {
+  app.use(express.static(frontendPublicPath));
+}
+
 /* =========================
    RUTA PRINCIPAL
 ========================= */
 
 app.get("/", (req, res) => {
-  res.status(200).json({
+  if (fs.existsSync(frontendDistPath)) {
+    return res.sendFile(path.join(frontendDistPath, "index.html"));
+  }
+
+  return res.status(200).json({
     ok: true,
     mensaje: "API REST del sistema turístico funcionando",
   });
@@ -68,8 +99,12 @@ app.use("/api/pagos", pagoRoutes);
    RUTA NO ENCONTRADA
 ========================= */
 
-app.use((req, res) => {
-  res.status(404).json({
+app.use((req, res, next) => {
+  if (fs.existsSync(frontendDistPath) && req.method === "GET") {
+    return res.sendFile(path.join(frontendDistPath, "index.html"));
+  }
+
+  return res.status(404).json({
     ok: false,
     mensaje: `Ruta no encontrada: ${req.method} ${req.originalUrl}`,
   });

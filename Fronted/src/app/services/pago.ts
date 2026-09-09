@@ -4,6 +4,8 @@ import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { buildApiUrl } from '../config/api.config';
+
 export type MetodoPago = 'tarjeta' | 'transferencia' | 'efectivo';
 
 export type EstadoPago = 'pendiente' | 'pagado' | 'rechazado' | 'reembolsado';
@@ -95,11 +97,11 @@ export interface RespuestaSimplePago {
 export class PagoService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiPagos = 'http://localhost:3000/api/pagos';
+  private readonly apiPagos = buildApiUrl('/api/pagos');
 
-  private readonly apiReservas = 'http://localhost:3000/api/reservas';
+  private readonly apiReservas = buildApiUrl('/api/reservas');
 
-  private readonly apiAdmin = 'http://localhost:3000/api/admin';
+  private readonly apiAdmin = buildApiUrl('/api/admin');
 
   obtenerReserva(idReserva: number): Observable<RespuestaReservaPago> {
     return this.http.get<RespuestaReservaPago>(`${this.apiReservas}/${idReserva}`, {

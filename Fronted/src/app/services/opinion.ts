@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { buildApiUrl } from '../config/api.config';
+
 export interface OpinionTour {
   idOpinion: number;
   idTour: number;
@@ -42,7 +44,7 @@ export interface RespuestaOpinion {
 })
 export class OpinionService {
   private readonly http = inject(HttpClient);
-  private readonly api = 'http://localhost:3000/api/opiniones';
+  private readonly api = buildApiUrl('/api/opiniones');
 
   listarRecientes(limite = 6): Observable<RespuestaOpiniones> {
     return this.http.get<RespuestaOpiniones>(`${this.api}/recientes`, {

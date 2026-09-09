@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { buildApiUrl } from '../config/api.config';
+
 export interface Tour {
   id: number;
   idTour: number;
@@ -87,7 +89,7 @@ interface RespuestaEliminar {
 })
 export class Tuorservicio {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/api/tours';
+  private readonly apiUrl = buildApiUrl('/api/tours');
   private cargaIniciada = false;
 
   readonly tours = signal<Tour[]>([]);

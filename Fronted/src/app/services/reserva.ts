@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
+import { buildApiUrl } from '../config/api.config';
+
 export type EstadoReserva = 'Confirmada' | 'Pendiente' | 'Cancelada';
 
 export interface ReservaGuardada {
@@ -80,7 +82,7 @@ export interface RespuestaSimple {
 })
 export class ReservaService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/api/reservas';
+  private readonly apiUrl = buildApiUrl('/api/reservas');
 
   private readonly _reservas = signal<ReservaGuardada[]>([]);
   readonly reservas = this._reservas.asReadonly();

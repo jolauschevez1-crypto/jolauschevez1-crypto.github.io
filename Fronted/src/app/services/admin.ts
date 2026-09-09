@@ -4,6 +4,8 @@ import { Injectable, inject } from '@angular/core';
 
 import { Observable, timeout } from 'rxjs';
 
+import { buildApiUrl } from '../config/api.config';
+
 export interface DashboardAdmin {
   usuarios: number;
   tours: number;
@@ -208,7 +210,7 @@ export interface RespuestaSimple {
 export class AdminService {
   private readonly http = inject(HttpClient);
 
-  private readonly api = 'http://localhost:3000/api/admin';
+  private readonly api = buildApiUrl('/api/admin');
 
   obtenerDashboard(): Observable<any> {
     return this.http.get(`${this.api}/dashboard`, this.opciones());

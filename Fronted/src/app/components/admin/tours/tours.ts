@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { buildUploadUrl } from '../../../config/api.config';
 import { AdminService, CategoriaAdmin, TourAdmin } from '../../../services/admin';
 
 interface FormularioTour {
@@ -203,7 +204,7 @@ export class ToursAdmin implements OnInit {
       return ruta;
     }
 
-    return `http://localhost:3000/uploads/${ruta}`;
+    return buildUploadUrl(`/${ruta}`);
   }
 
   protected activar(tour: TourAdmin): void {
